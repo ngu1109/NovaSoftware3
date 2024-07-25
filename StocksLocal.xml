@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<stock>
+  <item>
+    <name>Item1</name>
+    <barcode>12345</barcode>
+    <price>10.0</price>
+  </item>
+  <item>
+    <name>Item2</name>
+    <barcode>67890</barcode>
+    <price>20.0</price>
+  </item>
+</stock>

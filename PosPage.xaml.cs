@@ -20,6 +20,11 @@ using Windows.UI.Xaml.Navigation;
 
 namespace NovaSoftware
 {
+    public static class SharedState
+    {
+        public static StorageFile CurrentStockFile { get; set; }
+    }
+
     public sealed partial class PosPage : Page
     {
         private List<(string Name, double Price, int Qty)> cart = new List<(string Name, double Price, int Qty)>();
@@ -49,59 +54,87 @@ namespace NovaSoftware
 
         private async void AddToCartButton_Click(object sender, RoutedEventArgs e)
         {
-            var barcode = BarcodeTextBox.Text;
-            var qty = int.Parse(QtyTextBox.Text);
+            var barcode = BarcodeTextBox.Text.Trim();
+            if (!int.TryParse(QtyTextBox.Text.Trim(), out int qty))
+            {
+                await ShowDialog("Error", "Invalid quantity");
+                return;
+            }
 
-            StorageFolder localFolder = ApplicationData.Current.LocalFolder;
-            StorageFile stockFile = await localFolder.GetFileAsync(StockFileName);
+            if (SharedState.CurrentStockFile == null)
+            {
+                await ShowDialog("Error", "No stock file selected or created.");
+                return;
+            }
 
             XDocument doc;
-            using (Stream fileStream = await stockFile.OpenStreamForReadAsync())
+            try
             {
-                doc = XDocument.Load(fileStream);
+                using (Stream fileStream = await SharedState.CurrentStockFile.OpenStreamForReadAsync())
+                {
+                    doc = XDocument.Load(fileStream);
+                }
+            }
+            catch (Exception ex)
+            {
+                await ShowDialog("Error", $"Failed to read stock file: {ex.Message}");
+                return;
             }
 
             var item = doc.Element("stock")
                           .Elements("item")
-                          .FirstOrDefault(x => x.Element("barcode").Value == barcode);
+                          .FirstOrDefault(x => x.Element("barcode")?.Value == barcode);
 
             if (item != null)
             {
-                var name = item.Element("name").Value;
-                var price = double.Parse(item.Element("price").Value);
-                cart.Add((name, price, qty));
-                total += price * qty;
+                var name = item.Element("name")?.Value;
+                var price = double.Parse(item.Element("price")?.Value ?? "0");
+                var totalItemPrice = price * qty;
+
+                cart.Add((name, totalItemPrice, qty));
+                total += totalItemPrice;
                 UpdateCart();
             }
             else
             {
-                var dialog = new ContentDialog
-                {
-                    Title = "Error",
-                    Content = "Item not found",
-                    CloseButtonText = "OK"
-                };
-                await dialog.ShowAsync();
+                await ShowDialog("Error", "Item not found");
             }
+        }
+
+        private async Task ShowDialog(string title, string content)
+        {
+            var dialog = new ContentDialog
+            {
+                Title = title,
+                Content = content,
+                CloseButtonText = "OK"
+            };
+            await dialog.ShowAsync();
         }
 
         private void UpdateCart()
         {
             CartListView.ItemsSource = null;
-            CartListView.ItemsSource = cart;
-            TotalTextBlock.Text = $"Total: ${total:F2}";
+            CartListView.ItemsSource = cart.Select(item => new
+            {
+                item.Name,
+                Qty = item.Qty.ToString("D4"),
+                Price = item.Price.ToString("C2")
+            }).ToList();
+            TotalTextBlock.Text = $"Total: {total:C2}";
         }
+
 
         private void ApplyDiscountButton_Click(object sender, RoutedEventArgs e)
         {
-            var discount = double.Parse(DiscountTextBox.Text);
+            var discount = double.Parse(InputTextBox.Text);
             total -= total * (discount / 100);
             UpdateCart();
         }
 
         private void ApplyDeductionButton_Click(object sender, RoutedEventArgs e)
         {
-            var deduction = double.Parse(DeductionTextBox.Text);
+            var deduction = double.Parse(InputTextBox.Text);
             total -= deduction;
             UpdateCart();
         }
@@ -168,6 +201,19 @@ namespace NovaSoftware
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(MainMenuPage));
+        }
+
+        private void NumberPadButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button)
+            {
+                InputTextBox.Text += button.Content.ToString();
+            }
+        }
+
+        private void ClearButton_Click(object sender, RoutedEventArgs e)
+        {
+            InputTextBox.Text = string.Empty;
         }
     }
 }
