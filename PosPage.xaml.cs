@@ -35,7 +35,7 @@ namespace NovaSoftware
         public PosPage()
         {
             this.InitializeComponent();
-            EnsureSalesFileExists();
+            _ = EnsureSalesFileExists();
         }
 
         private async Task EnsureSalesFileExists()
@@ -87,8 +87,14 @@ namespace NovaSoftware
 
             if (item != null)
             {
-                var name = item.Element("name")?.Value;
-                var price = double.Parse(item.Element("price")?.Value ?? "0");
+                var name = item.Element("name")?.Value ?? "Unknown";
+                var priceElement = item.Element("price")?.Value;
+                if (!double.TryParse(priceElement, out double price))
+                {
+                    await ShowDialog("Error", "Invalid price in stock file");
+                    return;
+                }
+
                 var totalItemPrice = price * qty;
 
                 cart.Add((name, totalItemPrice, qty));
@@ -124,19 +130,30 @@ namespace NovaSoftware
             TotalTextBlock.Text = $"Total: {total:C2}";
         }
 
-
         private void ApplyDiscountButton_Click(object sender, RoutedEventArgs e)
         {
-            var discount = double.Parse(InputTextBox.Text);
-            total -= total * (discount / 100);
-            UpdateCart();
+            if (double.TryParse(InputTextBox.Text, out double discount))
+            {
+                total -= total * (discount / 100);
+                UpdateCart();
+            }
+            else
+            {
+                _ = ShowDialog("Error", "Invalid discount value");
+            }
         }
 
         private void ApplyDeductionButton_Click(object sender, RoutedEventArgs e)
         {
-            var deduction = double.Parse(InputTextBox.Text);
-            total -= deduction;
-            UpdateCart();
+            if (double.TryParse(InputTextBox.Text, out double deduction))
+            {
+                total -= deduction;
+                UpdateCart();
+            }
+            else
+            {
+                _ = ShowDialog("Error", "Invalid deduction value");
+            }
         }
 
         private async void PayWithCashButton_Click(object sender, RoutedEventArgs e)
@@ -214,6 +231,10 @@ namespace NovaSoftware
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
             InputTextBox.Text = string.Empty;
+        }
+
+        private void RemoveItemButton_Click(object sender, RoutedEventArgs e)
+        { 
         }
     }
 }

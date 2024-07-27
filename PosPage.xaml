@@ -9,82 +9,94 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
 
-        <StackPanel Orientation="Vertical" Grid.Row="1" Margin="10">
-            <TextBox x:Name="BarcodeTextBox" Header="Barcode" Margin="0,10,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="QtyTextBox" Header="Quantity" Margin="0,10,0,0" VerticalAlignment="Top"/>
-            <Button Content="Add to Cart" Click="AddToCartButton_Click" Width="300" Margin="0,10,0,0" VerticalAlignment="Top" Background="#33FDFF00"/>
-            <TextBox x:Name="InputTextBox" Header="Input" Margin="0,10,0,0" VerticalAlignment="Top"/>
-            
-            <Grid Margin="0,10,0,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <!-- Number Pad -->
-                <Button Content="1" Grid.Row="0" Grid.Column="0" Click="NumberPadButton_Click" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch"/>
-                <Button Content="2" Grid.Row="0" Grid.Column="1" Click="NumberPadButton_Click" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch"/>
-                <Button Content="3" Grid.Row="0" Grid.Column="2" Click="NumberPadButton_Click" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch"/>
-                <Button Content="4" Grid.Row="1" Grid.Column="0" Click="NumberPadButton_Click" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch"/>
-                <Button Content="5" Grid.Row="1" Grid.Column="1" Click="NumberPadButton_Click" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch"/>
-                <Button Content="6" Grid.Row="1" Grid.Column="2" Click="NumberPadButton_Click" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch"/>
-                <Button Content="7" Grid.Row="2" Grid.Column="0" Click="NumberPadButton_Click" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch"/>
-                <Button Content="8" Grid.Row="2" Grid.Column="1" Click="NumberPadButton_Click" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch"/>
-                <Button Content="9" Grid.Row="2" Grid.Column="2" Click="NumberPadButton_Click" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch"/>
-                <Button Content="0" Grid.Row="3" Grid.Column="1" Click="NumberPadButton_Click" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch"/>
-                <Button Content="." Grid.Row="3" Grid.Column="0" Click="NumberPadButton_Click" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch"/>
-                <Button Content="Clear" Grid.Row="3" Grid.Column="2" Click="ClearButton_Click" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch"/>
-            </Grid>
-            
-            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                <Button Content="Apply Discount" Click="ApplyDiscountButton_Click" Width="150" Margin="0,0,10,0" Background="#33FFE3A6"/>
-                <Button Content="Apply Deduction" Click="ApplyDeductionButton_Click" Width="150" Margin="0,0,10,0" Background="#33FD7777"/>
-                <Button Content="Pay with Cash" Click="PayWithCashButton_Click" Width="150" Margin="0,0,10,0" Background="#33C0FD86"/>
-                <Button Content="Pay with Credit" Click="PayWithCreditButton_Click" Width="150" Background="#336D89FD"/>
-            </StackPanel>
-            
-            <Button Content="Back" Click="BackButton_Click" Width="300" Margin="0,10,0,0" VerticalAlignment="Top"/>
-        </StackPanel>
-
-        <ListView x:Name="CartListView" Grid.Row="0" Margin="10,10,10,10" FontFamily="Microsoft YaHei" FontSize="24" Grid.RowSpan="2">
-            <ListView.Header>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="80" />
-                        <ColumnDefinition Width="120" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="Name" FontWeight="Bold" Grid.Column="0" />
-                    <TextBlock Text="Qty" FontWeight="Bold" TextAlignment="Left" Grid.Column="1" />
-                    <TextBlock Text="Price" FontWeight="Bold" TextAlignment="Left" Grid.Column="2" />
-                </Grid>
-            </ListView.Header>
+        <!-- Items Section -->
+        <ListView Grid.Row="0" Grid.Column="0" x:Name="CartListView" Margin="10">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="240" />
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Name}" Grid.Column="0" />
-                        <TextBlock Text="{Binding Qty}" Grid.Column="1" TextAlignment="Right" />
-                        <TextBlock Text="{Binding Price, Converter={StaticResource PriceConverter}}" Grid.Column="2" TextAlignment="Right" />
+                        <TextBlock Grid.Column="0" Text="{Binding Name}" />
+                        <TextBlock Grid.Column="1" Text="{Binding Qty}" />
+                        <TextBlock Grid.Column="2" Text="{Binding Price}" />
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <TextBlock x:Name="TotalTextBlock" Grid.Row="0" Text="Total: $0.00" TextAlignment="Right" VerticalAlignment="Bottom" Margin="10"/>
+
+        <!-- Total Section -->
+        <StackPanel Grid.Row="0" Grid.Column="1" Margin="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="TotalTextBlock" Text="Total: $0.00" FontSize="24" Margin="0,0,0,10" />
+                <Button Content="Back" Click="BackButton_Click" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,5,5,10"/>
+            </Grid>
+        </StackPanel>
+
+        <!-- Input TextBox -->
+        <TextBox Grid.Row="1" Grid.Column="0" x:Name="InputTextBox" Header="Input" Margin="10" />
+
+        <!-- Number Pad and Action Buttons -->
+        <Grid Grid.Row="2" Grid.Column="0" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Button Content="1" Click="NumberPadButton_Click" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" />
+            <Button Content="2" Click="NumberPadButton_Click" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" />
+            <Button Content="3" Click="NumberPadButton_Click" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" />
+            <Button Content="4" Click="NumberPadButton_Click" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" />
+            <Button Content="5" Click="NumberPadButton_Click" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" />
+            <Button Content="6" Click="NumberPadButton_Click" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" />
+            <Button Content="7" Click="NumberPadButton_Click" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" />
+            <Button Content="8" Click="NumberPadButton_Click" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" />
+            <Button Content="9" Click="NumberPadButton_Click" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" />
+            <Button Content="0" Click="NumberPadButton_Click" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" />
+            <Button Content="Clear" Click="ClearButton_Click" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" />
+            <Button Content="Enter" Click="ApplyDiscountButton_Click" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" />
+            <Button Content="Remove Item" Click="RemoveItemButton_Click" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Grid.Row="2" Grid.Column="3" />
+            <Button Content="Add to Cart" Click="AddToCartButton_Click" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Grid.Row="3" Grid.Column="3" />
+            <Button Content="Apply Discount" Click="ApplyDiscountButton_Click" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="3"/>
+            <Button Content="Apply Deduction" Click="ApplyDeductionButton_Click" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="3"/>
+        </Grid>
+
+        <!-- Actions Section -->
+        <StackPanel Grid.Row="2" Grid.Column="1" Margin="10">
+            <Grid Height="381">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBox x:Name="BarcodeTextBox" Header="Barcode" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Grid.Row="0"/>
+                <TextBox x:Name="QtyTextBox" Header="Quantity" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Grid.Row="1"/>
+                <Button Content="Pay with Cash" Click="PayWithCashButton_Click" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Grid.Row="2"/>
+                <Button Content="Pay with Credit" Click="PayWithCreditButton_Click" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Grid.Row="3"/>
+            </Grid>
+        </StackPanel>
     </Grid>
 </Page>

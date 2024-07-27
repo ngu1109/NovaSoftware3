@@ -38,7 +38,7 @@ namespace NovaSoftware
                     Content = "Invalid Credentials",
                     CloseButtonText = "OK"
                 };
-                dialog.ShowAsync();
+                _ = dialog.ShowAsync();
             }
         }
     }

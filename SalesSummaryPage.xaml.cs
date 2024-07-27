@@ -28,7 +28,6 @@ namespace NovaSoftware
         {
             this.InitializeComponent();
             LoadSalesData();
-            LoadStockData();
         }
 
         private async void LoadSalesData()
@@ -62,25 +61,6 @@ namespace NovaSoftware
 
             var overallTotalSales = sales.Sum(s => double.Parse(s.Total));
             OverallTotalSalesTextBlock.Text = $"${overallTotalSales:F2}";
-        }
-
-        private async void LoadStockData()
-        {
-            StorageFolder localFolder = ApplicationData.Current.LocalFolder;
-            StorageFile stockFile = await localFolder.GetFileAsync(StockFileName);
-
-            XDocument doc;
-            using (Stream fileStream = await stockFile.OpenStreamForReadAsync())
-            {
-                doc = XDocument.Load(fileStream);
-            }
-
-            var stockItems = doc.Element("stock")
-                                .Elements("item")
-                                .Select(i => i.Element("name")?.Value)
-                                .ToList();
-
-            StockListView.ItemsSource = stockItems;
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)

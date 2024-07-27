@@ -10,4 +10,9 @@
     <barcode>67890</barcode>
     <price>20.0</price>
   </item>
+  <item>
+    <name>Cass</name>
+    <barcode>1</barcode>
+    <price>100000000000000000000000000000</price>
+  </item>
 </stock>

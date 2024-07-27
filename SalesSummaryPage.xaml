@@ -17,14 +17,7 @@
             <TextBlock Text="Overall Total Sales:" FontSize="18"/>
             <TextBlock x:Name="OverallTotalSalesTextBlock" FontSize="16" Margin="0,0,0,20"/>
 
-            <TextBlock Text="Stock Items:" FontSize="18"/>
-            <ListView x:Name="StockListView" Margin="0,0,0,20">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding}" FontSize="16"/>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            
 
             <TextBlock Text="Sales Today:" FontSize="18"/>
             <ListView x:Name="SalesListView" Margin="0,0,0,20">
