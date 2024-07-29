@@ -1,18 +1,153 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <stock>
   <item>
-    <name>Item1</name>
-    <barcode>12345</barcode>
-    <price>10.0</price>
+    <name>Apple</name>
+    <barcode>10001</barcode>
+    <price>0.99</price>
   </item>
   <item>
-    <name>Item2</name>
-    <barcode>67890</barcode>
-    <price>20.0</price>
+    <name>Bread Loaf</name>
+    <barcode>10002</barcode>
+    <price>2.49</price>
   </item>
   <item>
-    <name>Cass</name>
-    <barcode>1</barcode>
-    <price>100000000000000000000000000000</price>
+    <name>Milk (1 Gallon)</name>
+    <barcode>10003</barcode>
+    <price>3.29</price>
+  </item>
+  <item>
+    <name>Eggs (Dozen)</name>
+    <barcode>10004</barcode>
+    <price>1.99</price>
+  </item>
+  <item>
+    <name>Chicken Breast (1 lb)</name>
+    <barcode>10005</barcode>
+    <price>4.99</price>
+  </item>
+  <item>
+    <name>Orange Juice (1 Gallon)</name>
+    <barcode>10006</barcode>
+    <price>4.29</price>
+  </item>
+  <item>
+    <name>Bananas (1 lb)</name>
+    <barcode>10007</barcode>
+    <price>0.59</price>
+  </item>
+  <item>
+    <name>Cheddar Cheese (8 oz)</name>
+    <barcode>10008</barcode>
+    <price>2.99</price>
+  </item>
+  <item>
+    <name>Yogurt (6 oz)</name>
+    <barcode>10009</barcode>
+    <price>0.89</price>
+  </item>
+  <item>
+    <name>Ground Beef (1 lb)</name>
+    <barcode>10010</barcode>
+    <price>5.99</price>
+  </item>
+  <item>
+    <name>Pasta (16 oz)</name>
+    <barcode>10011</barcode>
+    <price>1.49</price>
+  </item>
+  <item>
+    <name>Tomato Sauce (24 oz)</name>
+    <barcode>10012</barcode>
+    <price>1.79</price>
+  </item>
+  <item>
+    <name>Olive Oil (16 oz)</name>
+    <barcode>10013</barcode>
+    <price>5.99</price>
+  </item>
+  <item>
+    <name>Butter (1 lb)</name>
+    <barcode>10014</barcode>
+    <price>3.49</price>
+  </item>
+  <item>
+    <name>Rice (5 lb)</name>
+    <barcode>10015</barcode>
+    <price>4.49</price>
+  </item>
+  <item>
+    <name>Sugar (4 lb)</name>
+    <barcode>10016</barcode>
+    <price>2.79</price>
+  </item>
+  <item>
+    <name>Cereal (12 oz)</name>
+    <barcode>10017</barcode>
+    <price>3.99</price>
+  </item>
+  <item>
+    <name>Peanut Butter (16 oz)</name>
+    <barcode>10018</barcode>
+    <price>2.99</price>
+  </item>
+  <item>
+    <name>Jelly (16 oz)</name>
+    <barcode>10019</barcode>
+    <price>2.49</price>
+  </item>
+  <item>
+    <name>Potatoes (5 lb)</name>
+    <barcode>10020</barcode>
+    <price>3.99</price>
+  </item>
+  <item>
+    <name>Onions (3 lb)</name>
+    <barcode>10021</barcode>
+    <price>1.99</price>
+  </item>
+  <item>
+    <name>Carrots (1 lb)</name>
+    <barcode>10022</barcode>
+    <price>0.99</price>
+  </item>
+  <item>
+    <name>Bell Peppers (1 lb)</name>
+    <barcode>10023</barcode>
+    <price>2.99</price>
+  </item>
+  <item>
+    <name>Broccoli (1 lb)</name>
+    <barcode>10024</barcode>
+    <price>1.89</price>
+  </item>
+  <item>
+    <name>Spinach (10 oz)</name>
+    <barcode>10025</barcode>
+    <price>2.49</price>
+  </item>
+  <item>
+    <name>Salmon (1 lb)</name>
+    <barcode>10026</barcode>
+    <price>9.99</price>
+  </item>
+  <item>
+    <name>Shrimp (1 lb)</name>
+    <barcode>10027</barcode>
+    <price>12.99</price>
+  </item>
+  <item>
+    <name>Chocolate Bar (3.5 oz)</name>
+    <barcode>10028</barcode>
+    <price>1.49</price>
+  </item>
+  <item>
+    <name>Ice Cream (1.5 qt)</name>
+    <barcode>10029</barcode>
+    <price>4.49</price>
+  </item>
+  <item>
+    <name>Cookies (12 oz)</name>
+    <barcode>10030</barcode>
+    <price>2.99</price>
   </item>
 </stock>

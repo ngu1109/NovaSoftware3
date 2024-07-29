@@ -76,7 +76,7 @@
             <Button Content="9" Click="NumberPadButton_Click" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" />
             <Button Content="0" Click="NumberPadButton_Click" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" />
             <Button Content="Clear" Click="ClearButton_Click" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" />
-            <Button Content="Enter" Click="ApplyDiscountButton_Click" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" />
+            <Button Content="." Click="DecimalButton_Click" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" />
             <Button Content="Remove Item" Click="RemoveItemButton_Click" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Grid.Row="2" Grid.Column="3" />
             <Button Content="Add to Cart" Click="AddToCartButton_Click" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Grid.Row="3" Grid.Column="3" />
             <Button Content="Apply Discount" Click="ApplyDiscountButton_Click" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="3"/>

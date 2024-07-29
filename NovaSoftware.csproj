@@ -135,6 +135,7 @@
     <Compile Include="SalesSummaryPage.xaml.cs">
       <DependentUpon>SalesSummaryPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SharedState.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

@@ -9,8 +9,6 @@ using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace NovaSoftware
 {
     public sealed partial class ManageStockPage : Page
@@ -21,6 +19,12 @@ namespace NovaSoftware
         public ManageStockPage()
         {
             this.InitializeComponent();
+            // Load stock items if a stock file is already selected
+            if (SharedState.CurrentStockFile != null)
+            {
+                currentStockFile = SharedState.CurrentStockFile;
+                _ = LoadStockItemsAsync();
+            }
         }
 
         private async void SelectXmlFileButton_Click(object sender, RoutedEventArgs e)
@@ -36,15 +40,9 @@ namespace NovaSoftware
             if (file != null)
             {
                 currentStockFile = file;
-                SharedState.CurrentStockFile = file; // Set the shared stock file
-                await LoadStockItems();
-                var dialog = new ContentDialog
-                {
-                    Title = "File Selected",
-                    Content = $"Selected file: {file.Name}",
-                    CloseButtonText = "OK"
-                };
-                await dialog.ShowAsync();
+                SharedState.CurrentStockFile = file; // Update shared state
+                await LoadStockItemsAsync();
+                await ShowDialogAsync("File Selected", $"Selected file: {file.Name}");
             }
         }
 
@@ -55,7 +53,7 @@ namespace NovaSoftware
                 SuggestedStartLocation = PickerLocationId.DocumentsLibrary,
                 SuggestedFileName = "NewStock"
             };
-            picker.FileTypeChoices.Add("XML", new List<string>() { ".xml" });
+            picker.FileTypeChoices.Add("XML", new List<string> { ".xml" });
 
             StorageFile file = await picker.PickSaveFileAsync();
             if (file != null)
@@ -66,97 +64,73 @@ namespace NovaSoftware
                     doc.Save(fileStream);
                 }
                 currentStockFile = file;
-                SharedState.CurrentStockFile = file; // Set the shared stock file
-                await LoadStockItems();
-                var dialog = new ContentDialog
-                {
-                    Title = "File Created",
-                    Content = $"Created and selected file: {file.Name}",
-                    CloseButtonText = "OK"
-                };
-                await dialog.ShowAsync();
+                SharedState.CurrentStockFile = file; // Update shared state
+                await LoadStockItemsAsync();
+                await ShowDialogAsync("File Created", $"Created and selected file: {file.Name}");
             }
         }
 
         private async void AddItemButton_Click(object sender, RoutedEventArgs e)
         {
-            // Check if an XML file is selected or created
             if (currentStockFile == null)
             {
-                var dialog = new ContentDialog
-                {
-                    Title = "Error",
-                    Content = "No XML file selected or created.",
-                    CloseButtonText = "OK"
-                };
-                await dialog.ShowAsync();
+                await ShowDialogAsync("Error", "No XML file selected or created.");
                 return;
             }
 
-            // Validate text boxes
             var itemName = ItemNameTextBox.Text.Trim();
             var barcode = BarcodeTextBox.Text.Trim();
-            var price = PriceTextBox.Text.Trim();
+            var priceText = PriceTextBox.Text.Trim();
 
-            if (string.IsNullOrEmpty(itemName) || string.IsNullOrEmpty(barcode) || string.IsNullOrEmpty(price))
+            if (string.IsNullOrEmpty(itemName) || string.IsNullOrEmpty(barcode) || string.IsNullOrEmpty(priceText))
             {
-                var errorDialog = new ContentDialog
-                {
-                    Title = "Error",
-                    Content = "All fields must be filled out.",
-                    CloseButtonText = "OK"
-                };
-                await errorDialog.ShowAsync();
+                await ShowDialogAsync("Error", "All fields must be filled out.");
                 return;
             }
 
-            // Check for duplicate items
-            if (await IsDuplicateItem(itemName, barcode))
+            if (!double.TryParse(priceText, out double price))
             {
-                var duplicateDialog = new ContentDialog
-                {
-                    Title = "Error",
-                    Content = "An item with this name or barcode already exists.",
-                    CloseButtonText = "OK"
-                };
-                await duplicateDialog.ShowAsync();
+                await ShowDialogAsync("Error", "Invalid price. Please enter a valid number.");
                 return;
             }
 
-            // Add new item to the XML file
-            XDocument doc;
-            using (Stream fileStream = await currentStockFile.OpenStreamForReadAsync())
+            if (await IsDuplicateItemAsync(itemName, barcode))
             {
-                doc = XDocument.Load(fileStream);
+                await ShowDialogAsync("Error", "An item with this name or barcode already exists.");
+                return;
             }
 
-            var root = doc.Element("stock");
-
-            var newItem = new XElement("item",
-                new XElement("name", itemName),
-                new XElement("barcode", barcode),
-                new XElement("price", price)
-            );
-
-            root.Add(newItem);
-
-            using (Stream fileStream = await currentStockFile.OpenStreamForWriteAsync())
+            try
             {
-                doc.Save(fileStream);
+                XDocument doc;
+                using (Stream fileStream = await currentStockFile.OpenStreamForReadAsync())
+                {
+                    doc = XDocument.Load(fileStream);
+                }
+
+                var root = doc.Element("stock");
+                var newItem = new XElement("item",
+                    new XElement("name", itemName),
+                    new XElement("barcode", barcode),
+                    new XElement("price", price.ToString())
+                );
+                root.Add(newItem);
+
+                using (Stream fileStream = await currentStockFile.OpenStreamForWriteAsync())
+                {
+                    doc.Save(fileStream);
+                }
+
+                await LoadStockItemsAsync();
+                await ShowDialogAsync("Success", "Item Added");
             }
-
-            await LoadStockItems();
-
-            var successDialog = new ContentDialog
+            catch (Exception ex)
             {
-                Title = "Success",
-                Content = "Item Added",
-                CloseButtonText = "OK"
-            };
-            await successDialog.ShowAsync();
+                await ShowDialogAsync("Error", $"Failed to add item: {ex.Message}");
+            }
         }
 
-        private async Task<bool> IsDuplicateItem(string name, string barcode)
+        private async Task<bool> IsDuplicateItemAsync(string name, string barcode)
         {
             if (currentStockFile == null)
                 return false;
@@ -177,7 +151,7 @@ namespace NovaSoftware
             return existingItems;
         }
 
-        private async Task LoadStockItems()
+        private async Task LoadStockItemsAsync()
         {
             if (currentStockFile == null) return;
 
@@ -203,6 +177,17 @@ namespace NovaSoftware
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(MainMenuPage));
+        }
+
+        private async Task ShowDialogAsync(string title, string content)
+        {
+            var dialog = new ContentDialog
+            {
+                Title = title,
+                Content = content,
+                CloseButtonText = "OK"
+            };
+            await dialog.ShowAsync();
         }
     }
 }

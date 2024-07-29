@@ -1,36 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace NovaSoftware
 {
-    public static class SharedState
-    {
-        public static StorageFile CurrentStockFile { get; set; }
-    }
-
     public sealed partial class PosPage : Page
     {
         private List<(string Name, double Price, int Qty)> cart = new List<(string Name, double Price, int Qty)>();
         private double total = 0.0;
-        private const string StockFileName = "Stock.xml";
-        private const string SalesFileName = "Sales.xml";
 
         public PosPage()
         {
@@ -40,74 +24,121 @@ namespace NovaSoftware
 
         private async Task EnsureSalesFileExists()
         {
-            StorageFolder localFolder = ApplicationData.Current.LocalFolder;
-            StorageFile salesFile = await localFolder.CreateFileAsync(SalesFileName, CreationCollisionOption.OpenIfExists);
-            if (new FileInfo(salesFile.Path).Length == 0)
+            if (SharedState.CurrentSalesFile == null)
+            {
+                StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+                SharedState.CurrentSalesFile = await localFolder.CreateFileAsync("Sales.xml", CreationCollisionOption.OpenIfExists);
+            }
+
+            if (SharedState.CurrentSalesFile != null && new FileInfo(SharedState.CurrentSalesFile.Path).Length == 0)
             {
                 XDocument doc = new XDocument(new XElement("sales"));
-                using (Stream fileStream = await salesFile.OpenStreamForWriteAsync())
+                using (Stream fileStream = await SharedState.CurrentSalesFile.OpenStreamForWriteAsync())
                 {
                     doc.Save(fileStream);
                 }
             }
         }
 
+        private async Task SaveSaleAsync(string date, string paymentMethod, double total)
+        {
+            if (SharedState.CurrentSalesFile == null)
+            {
+                await ShowDialogAsync("Error", "No sales file selected. Please select or create a sales file.");
+                return;
+            }
+
+            try
+            {
+                XDocument doc;
+                using (Stream fileStream = await SharedState.CurrentSalesFile.OpenStreamForReadAsync())
+                {
+                    doc = XDocument.Load(fileStream);
+                }
+
+                var root = doc.Element("sales");
+                if (root == null)
+                {
+                    root = new XElement("sales");
+                    doc.Add(root);
+                }
+
+                var saleElement = new XElement("sale",
+                    new XAttribute("date", date),
+                    new XAttribute("payment_method", paymentMethod),
+                    new XElement("total", total.ToString("F2", CultureInfo.InvariantCulture))
+                );
+
+                root.Add(saleElement);
+
+                using (Stream fileStream = await SharedState.CurrentSalesFile.OpenStreamForWriteAsync())
+                {
+                    doc.Save(fileStream);
+                }
+
+                await ShowDialogAsync("Success", "Sale saved successfully.");
+            }
+            catch (Exception ex)
+            {
+                await ShowDialogAsync("Error", $"Failed to save sale: {ex.Message}");
+            }
+        }
+
         private async void AddToCartButton_Click(object sender, RoutedEventArgs e)
         {
             var barcode = BarcodeTextBox.Text.Trim();
-            if (!int.TryParse(QtyTextBox.Text.Trim(), out int qty))
+            if (!int.TryParse(QtyTextBox.Text.Trim(), out int qty) || qty <= 0)
             {
-                await ShowDialog("Error", "Invalid quantity");
+                await ShowDialogAsync("Error", "Invalid quantity");
                 return;
             }
 
             if (SharedState.CurrentStockFile == null)
             {
-                await ShowDialog("Error", "No stock file selected or created.");
+                await ShowDialogAsync("Error", "No stock file selected or created.");
                 return;
             }
 
-            XDocument doc;
             try
             {
+                XDocument doc;
                 using (Stream fileStream = await SharedState.CurrentStockFile.OpenStreamForReadAsync())
                 {
                     doc = XDocument.Load(fileStream);
                 }
+
+                var item = doc.Element("stock")
+                              .Elements("item")
+                              .FirstOrDefault(x => x.Element("barcode")?.Value == barcode);
+
+                if (item != null)
+                {
+                    var name = item.Element("name")?.Value ?? "Unknown";
+                    var priceElement = item.Element("price")?.Value;
+                    if (!double.TryParse(priceElement, out double price))
+                    {
+                        await ShowDialogAsync("Error", "Invalid price in stock file");
+                        return;
+                    }
+
+                    var totalItemPrice = price * qty;
+
+                    cart.Add((name, price, qty));
+                    total += totalItemPrice;
+                    UpdateCart();
+                }
+                else
+                {
+                    await ShowDialogAsync("Error", "Item not found");
+                }
             }
             catch (Exception ex)
             {
-                await ShowDialog("Error", $"Failed to read stock file: {ex.Message}");
-                return;
-            }
-
-            var item = doc.Element("stock")
-                          .Elements("item")
-                          .FirstOrDefault(x => x.Element("barcode")?.Value == barcode);
-
-            if (item != null)
-            {
-                var name = item.Element("name")?.Value ?? "Unknown";
-                var priceElement = item.Element("price")?.Value;
-                if (!double.TryParse(priceElement, out double price))
-                {
-                    await ShowDialog("Error", "Invalid price in stock file");
-                    return;
-                }
-
-                var totalItemPrice = price * qty;
-
-                cart.Add((name, totalItemPrice, qty));
-                total += totalItemPrice;
-                UpdateCart();
-            }
-            else
-            {
-                await ShowDialog("Error", "Item not found");
+                await ShowDialogAsync("Error", $"Failed to read stock file: {ex.Message}");
             }
         }
 
-        private async Task ShowDialog(string title, string content)
+        private async Task ShowDialogAsync(string title, string content)
         {
             var dialog = new ContentDialog
             {
@@ -134,12 +165,19 @@ namespace NovaSoftware
         {
             if (double.TryParse(InputTextBox.Text, out double discount))
             {
-                total -= total * (discount / 100);
-                UpdateCart();
+                if (discount >= 0 && discount <= 100)
+                {
+                    total -= total * (discount / 100);
+                    UpdateCart();
+                }
+                else
+                {
+                    _ = ShowDialogAsync("Error", "Discount should be between 0% and 100%");
+                }
             }
             else
             {
-                _ = ShowDialog("Error", "Invalid discount value");
+                _ = ShowDialogAsync("Error", "Invalid discount value");
             }
         }
 
@@ -147,12 +185,19 @@ namespace NovaSoftware
         {
             if (double.TryParse(InputTextBox.Text, out double deduction))
             {
-                total -= deduction;
-                UpdateCart();
+                if (deduction >= 0 && deduction <= total)
+                {
+                    total -= deduction;
+                    UpdateCart();
+                }
+                else
+                {
+                    _ = ShowDialogAsync("Error", "Deduction exceeds total amount or is negative");
+                }
             }
             else
             {
-                _ = ShowDialog("Error", "Invalid deduction value");
+                _ = ShowDialogAsync("Error", "Invalid deduction value");
             }
         }
 
@@ -168,51 +213,60 @@ namespace NovaSoftware
 
         private async Task Checkout(string paymentMethod)
         {
-            StorageFolder localFolder = ApplicationData.Current.LocalFolder;
-            StorageFile salesFile = await localFolder.GetFileAsync(SalesFileName);
-
-            XDocument doc;
-            using (Stream fileStream = await salesFile.OpenStreamForReadAsync())
+            try
             {
-                doc = XDocument.Load(fileStream);
-            }
+                if (SharedState.CurrentSalesFile == null)
+                {
+                    await ShowDialogAsync("Error", "No sales file selected.");
+                    return;
+                }
 
-            var root = doc.Element("sales");
+                XDocument doc;
+                using (Stream fileStream = await SharedState.CurrentSalesFile.OpenStreamForReadAsync())
+                {
+                    doc = XDocument.Load(fileStream);
+                }
 
-            var sale = new XElement("sale",
-                new XAttribute("date", DateTime.Now),
-                new XAttribute("payment_method", paymentMethod),
-                new XElement("total", total)
-            );
+                var root = doc.Element("sales");
 
-            foreach (var item in cart)
-            {
-                var saleItem = new XElement("item",
-                    new XAttribute("name", item.Name),
-                    new XAttribute("price", item.Price),
-                    new XAttribute("qty", item.Qty)
+                var sale = new XElement("sale",
+                    new XAttribute("date", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss")),  // Use ISO format
+                    new XAttribute("payment_method", paymentMethod),
+                    new XElement("total", total.ToString("F2", CultureInfo.InvariantCulture))
                 );
-                sale.Add(saleItem);
+
+                foreach (var item in cart)
+                {
+                    var saleItem = new XElement("item",
+                        new XAttribute("name", item.Name),
+                        new XAttribute("price", item.Price.ToString("F2", CultureInfo.InvariantCulture)),
+                        new XAttribute("qty", item.Qty)
+                    );
+                    sale.Add(saleItem);
+                }
+
+                root.Add(sale);
+
+                using (Stream fileStream = await SharedState.CurrentSalesFile.OpenStreamForWriteAsync())
+                {
+                    doc.Save(fileStream);
+                }
+
+                await ShowDialogAsync("Success", "Transaction Completed");
+
+                cart.Clear();
+                total = 0.0;
+                UpdateCart();
+
+                // Clear textboxes after checkout
+                BarcodeTextBox.Text = string.Empty;
+                QtyTextBox.Text = string.Empty;
+                InputTextBox.Text = string.Empty;
             }
-
-            root.Add(sale);
-
-            using (Stream fileStream = await salesFile.OpenStreamForWriteAsync())
+            catch (Exception ex)
             {
-                doc.Save(fileStream);
+                await ShowDialogAsync("Error", $"Failed to complete transaction: {ex.Message}");
             }
-
-            var dialog = new ContentDialog
-            {
-                Title = "Success",
-                Content = "Transaction Completed",
-                CloseButtonText = "OK"
-            };
-            await dialog.ShowAsync();
-
-            cart.Clear();
-            total = 0.0;
-            UpdateCart();
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
@@ -233,8 +287,18 @@ namespace NovaSoftware
             InputTextBox.Text = string.Empty;
         }
 
+        private void DecimalButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Prevent multiple decimals in the input
+            if (!InputTextBox.Text.Contains("."))
+            {
+                InputTextBox.Text += ".";
+            }
+        }
+
         private void RemoveItemButton_Click(object sender, RoutedEventArgs e)
-        { 
+        {
+            // Implement item removal logic if needed
         }
     }
 }

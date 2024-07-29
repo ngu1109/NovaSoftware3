@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<sales>
+  <sale date="2024-07-30T00:39:11" payment_method="credit">
+    <total>7.00</total>
+    <item name="Sugar (4 lb)" price="2.79" qty="3" />
+  </sale>
+</sales>

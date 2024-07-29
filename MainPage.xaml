@@ -10,7 +10,7 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBox x:Name="UsernameTextBox" Header="Username" Width="300"/>
-            <PasswordBox x:Name="PasswordBox" Header="Password" Width="300"/>
+            <PasswordBox x:Name="PasswordBox" Header="Password" Width="300" KeyDown="PasswordBox_KeyDown"/>
             <Button Content="Login" Click="LoginButton_Click" Width="300"/>
         </StackPanel>
     </Grid>
