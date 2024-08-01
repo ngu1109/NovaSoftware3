@@ -8,18 +8,53 @@ using System.Xml.Linq;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 
 namespace NovaSoftware
 {
     public sealed partial class PosPage : Page
     {
-        private List<(string Name, double Price, int Qty)> cart = new List<(string Name, double Price, int Qty)>();
+        // Update the cart list to use the Product class
+        private List<Product> cart = new List<Product>();
         private double total = 0.0;
 
         public PosPage()
         {
             this.InitializeComponent();
             _ = EnsureSalesFileExists();
+        }
+
+        public class Product
+        {
+            public string Name { get; set; }
+            public int Qty { get; set; }
+            public double Price { get; set; }
+
+            public double TotalPrice => Qty * Price;
+
+            public Product(string name, int qty, double price)
+            {
+                Name = name;
+                Qty = qty;
+                Price = price;
+            }
+        }
+
+        public class CurrencyConverter : IValueConverter
+        {
+            public object Convert(object value, Type targetType, object parameter, string language)
+            {
+                if (value is double doubleValue)
+                {
+                    return string.Format("{0:C2}", doubleValue);
+                }
+                return value.ToString();
+            }
+
+            public object ConvertBack(object value, Type targetType, object parameter, string language)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         private async Task EnsureSalesFileExists()
@@ -69,6 +104,16 @@ namespace NovaSoftware
                     new XElement("total", total.ToString("F2", CultureInfo.InvariantCulture))
                 );
 
+                foreach (var product in cart)
+                {
+                    var saleItem = new XElement("item",
+                        new XAttribute("name", product.Name),
+                        new XAttribute("price", product.Price.ToString("F2", CultureInfo.InvariantCulture)),
+                        new XAttribute("qty", product.Qty)
+                    );
+                    saleElement.Add(saleItem);
+                }
+
                 root.Add(saleElement);
 
                 using (Stream fileStream = await SharedState.CurrentSalesFile.OpenStreamForWriteAsync())
@@ -115,16 +160,15 @@ namespace NovaSoftware
                 {
                     var name = item.Element("name")?.Value ?? "Unknown";
                     var priceElement = item.Element("price")?.Value;
-                    if (!double.TryParse(priceElement, out double price))
+                    if (string.IsNullOrEmpty(priceElement) || !double.TryParse(priceElement, out double price))
                     {
                         await ShowDialogAsync("Error", "Invalid price in stock file");
                         return;
                     }
 
-                    var totalItemPrice = price * qty;
-
-                    cart.Add((name, price, qty));
-                    total += totalItemPrice;
+                    var product = new Product(name, qty, price);
+                    cart.Add(product);
+                    total += product.TotalPrice;
                     UpdateCart();
                 }
                 else
@@ -151,13 +195,16 @@ namespace NovaSoftware
 
         private void UpdateCart()
         {
-            CartListView.ItemsSource = null;
-            CartListView.ItemsSource = cart.Select(item => new
+            var cartDisplayList = cart.Select(item => new
             {
                 item.Name,
                 Qty = item.Qty.ToString("D4"),
-                Price = item.Price.ToString("C2")
+                Price = item.Price.ToString("C2"),
+                Total = item.TotalPrice.ToString("C2")
             }).ToList();
+
+            CartListView.ItemsSource = null;
+            CartListView.ItemsSource = cartDisplayList;
             TotalTextBlock.Text = $"Total: {total:C2}";
         }
 
@@ -230,17 +277,17 @@ namespace NovaSoftware
                 var root = doc.Element("sales");
 
                 var sale = new XElement("sale",
-                    new XAttribute("date", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss")),  // Use ISO format
+                    new XAttribute("date", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss")),
                     new XAttribute("payment_method", paymentMethod),
                     new XElement("total", total.ToString("F2", CultureInfo.InvariantCulture))
                 );
 
-                foreach (var item in cart)
+                foreach (var product in cart)
                 {
                     var saleItem = new XElement("item",
-                        new XAttribute("name", item.Name),
-                        new XAttribute("price", item.Price.ToString("F2", CultureInfo.InvariantCulture)),
-                        new XAttribute("qty", item.Qty)
+                        new XAttribute("name", product.Name),
+                        new XAttribute("price", product.Price.ToString("F2", CultureInfo.InvariantCulture)),
+                        new XAttribute("qty", product.Qty)
                     );
                     sale.Add(saleItem);
                 }

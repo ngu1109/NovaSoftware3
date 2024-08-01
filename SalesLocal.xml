@@ -4,4 +4,19 @@
     <total>7.00</total>
     <item name="Sugar (4 lb)" price="2.79" qty="3" />
   </sale>
+  <sale date="2024-07-29T00:39:11" payment_method="credit">
+    <total>14.00</total>
+    <item name="Sugar (4 lb)" price="2.79" qty="6" />
+  </sale>
+  <sale date="2024-07-30T19:25:44" payment_method="cash">
+    <total>30.29</total>
+    <item name="Apple" price="0.99" qty="1" />
+    <item name="Bell Peppers (1 lb)" price="2.99" qty="7" />
+    <item name="Sugar (4 lb)" price="2.79" qty="3" />
+  </sale>
+  <sale date="2024-07-30T19:29:34" payment_method="credit">
+    <total>35.00</total>
+    <item name="Apple" price="0.99" qty="3" />
+    <item name="Sugar (4 lb)" price="2.79" qty="12" />
+  </sale>
 </sales>

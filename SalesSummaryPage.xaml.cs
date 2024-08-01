@@ -74,10 +74,11 @@ namespace NovaSoftware
                     Total = FormatCurrency(s.Total)
                 }).ToList();
 
-                var today = DateTime.Today;
-                var todaySalesCash = sales.Where(s => IsToday(s.Date) && s.PaymentMethod == "cash")
+                var salesUtility = new SalesUtility();
+
+                var todaySalesCash = sales.Where(s => salesUtility.IsToday(s.Date) && s.PaymentMethod == "cash")
                                            .Sum(s => double.TryParse(s.Total, NumberStyles.Currency, CultureInfo.InvariantCulture, out double val) ? val : 0);
-                var todaySalesCredit = sales.Where(s => IsToday(s.Date) && s.PaymentMethod == "credit")
+                var todaySalesCredit = sales.Where(s => salesUtility.IsToday(s.Date) && s.PaymentMethod == "credit")
                                              .Sum(s => double.TryParse(s.Total, NumberStyles.Currency, CultureInfo.InvariantCulture, out double val) ? val : 0);
 
                 TodayTotalSalesCashTextBlock.Text = FormatCurrency(todaySalesCash);
@@ -99,17 +100,6 @@ namespace NovaSoftware
             {
                 await ShowDialogAsync("Error", $"Failed to load sales data: {ex.Message}");
             }
-        }
-
-        private bool IsToday(string date)
-        {
-            if (DateTime.TryParse(date, out DateTime parsedDate))
-            {
-                // Print the parsed date and today's date for debugging
-                Debug.WriteLine($"Parsed Date: {parsedDate.Date}, Today: {DateTime.Today}");
-                return parsedDate.Date == DateTime.Today;
-            }
-            return false;
         }
 
         private string ParseDate(string date)
@@ -249,6 +239,31 @@ namespace NovaSoftware
                 CloseButtonText = "OK"
             };
             await dialog.ShowAsync();
+        }
+    }
+
+    public class SalesUtility
+    {
+        public bool IsToday(string date)
+        {
+            Debug.WriteLine($"Processing Date String: {date}");
+
+            // Specify the exact format used in the XML file
+            string format = "dd-MM-yyyy - HH:mm";
+
+            if (DateTime.TryParseExact(date, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+            {
+                Debug.WriteLine($"Parsed Date: {parsedDate.Date}, Today: {DateTime.Today}");
+
+                // Compare only the date part (ignoring time)
+                return parsedDate.Date == DateTime.Today;
+            }
+            else
+            {
+                Debug.WriteLine($"Failed to parse date: {date}");
+            }
+
+            return false;
         }
     }
 }
