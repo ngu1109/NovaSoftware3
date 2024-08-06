@@ -9,28 +9,30 @@ using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Input;
 
 namespace NovaSoftware
 {
     public sealed partial class PosPage : Page
     {
-        // Update the cart list to use the Product class
         private List<Product> cart = new List<Product>();
+        private List<ProductAddition> additionHistory = new List<ProductAddition>();
         private double total = 0.0;
 
         public PosPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             _ = EnsureSalesFileExists();
+            BarcodeTextBox.KeyDown += BarcodeTextBox_KeyDown; // Handle barcode scanner inputs
         }
 
+        // This class is like, each item we're selling
         public class Product
         {
             public string Name { get; set; }
             public int Qty { get; set; }
             public double Price { get; set; }
-
-            public double TotalPrice => Qty * Price;
+            public double TotalPrice => Qty * Price; // Calculate total price
 
             public Product(string name, int qty, double price)
             {
@@ -40,15 +42,27 @@ namespace NovaSoftware
             }
         }
 
+        // This class keeps track of each time we add something to the cart
+        public class ProductAddition
+        {
+            public string Name { get; set; }
+            public int Qty { get; set; }
+            public double Price { get; set; }
+
+            public ProductAddition(string name, int qty, double price)
+            {
+                Name = name;
+                Qty = qty;
+                Price = price;
+            }
+        }
+
+        // This class helps us convert prices to a nice format with dollar signs
         public class CurrencyConverter : IValueConverter
         {
             public object Convert(object value, Type targetType, object parameter, string language)
             {
-                if (value is double doubleValue)
-                {
-                    return string.Format("{0:C2}", doubleValue);
-                }
-                return value.ToString();
+                return value is double doubleValue ? string.Format("{0:C2}", doubleValue) : value.ToString();
             }
 
             public object ConvertBack(object value, Type targetType, object parameter, string language)
@@ -57,6 +71,7 @@ namespace NovaSoftware
             }
         }
 
+        // Make sure the sales file exists so we can save stuff
         private async Task EnsureSalesFileExists()
         {
             if (SharedState.CurrentSalesFile == null)
@@ -65,6 +80,7 @@ namespace NovaSoftware
                 SharedState.CurrentSalesFile = await localFolder.CreateFileAsync("Sales.xml", CreationCollisionOption.OpenIfExists);
             }
 
+            // Initialize sales file if it's empty
             if (SharedState.CurrentSalesFile != null && new FileInfo(SharedState.CurrentSalesFile.Path).Length == 0)
             {
                 XDocument doc = new XDocument(new XElement("sales"));
@@ -75,6 +91,7 @@ namespace NovaSoftware
             }
         }
 
+        // Save the sale details into the sales file
         private async Task SaveSaleAsync(string date, string paymentMethod, double total)
         {
             if (SharedState.CurrentSalesFile == null)
@@ -91,12 +108,8 @@ namespace NovaSoftware
                     doc = XDocument.Load(fileStream);
                 }
 
-                var root = doc.Element("sales");
-                if (root == null)
-                {
-                    root = new XElement("sales");
-                    doc.Add(root);
-                }
+                var root = doc.Element("sales") ?? new XElement("sales");
+                if (root.Parent == null) doc.Add(root);
 
                 var saleElement = new XElement("sale",
                     new XAttribute("date", date),
@@ -104,6 +117,7 @@ namespace NovaSoftware
                     new XElement("total", total.ToString("F2", CultureInfo.InvariantCulture))
                 );
 
+                // Add each product in the cart to the sale
                 foreach (var product in cart)
                 {
                     var saleItem = new XElement("item",
@@ -129,7 +143,14 @@ namespace NovaSoftware
             }
         }
 
+        // This button adds stuff to the cart
         private async void AddToCartButton_Click(object sender, RoutedEventArgs e)
+        {
+            await AddToCart();
+        }
+
+        // Add an item to the cart using the barcode and quantity
+        private async Task AddToCart()
         {
             var barcode = BarcodeTextBox.Text.Trim();
             if (!int.TryParse(QtyTextBox.Text.Trim(), out int qty) || qty <= 0)
@@ -152,9 +173,7 @@ namespace NovaSoftware
                     doc = XDocument.Load(fileStream);
                 }
 
-                var item = doc.Element("stock")
-                              .Elements("item")
-                              .FirstOrDefault(x => x.Element("barcode")?.Value == barcode);
+                var item = doc.Element("stock")?.Elements("item").FirstOrDefault(x => x.Element("barcode")?.Value == barcode);
 
                 if (item != null)
                 {
@@ -166,9 +185,19 @@ namespace NovaSoftware
                         return;
                     }
 
-                    var product = new Product(name, qty, price);
-                    cart.Add(product);
-                    total += product.TotalPrice;
+                    var existingProduct = cart.FirstOrDefault(p => p.Name == name);
+                    if (existingProduct != null)
+                    {
+                        existingProduct.Qty += qty;
+                    }
+                    else
+                    {
+                        cart.Add(new Product(name, qty, price));
+                    }
+
+                    // Add to history
+                    additionHistory.Add(new ProductAddition(name, qty, price));
+                    total += price * qty;
                     UpdateCart();
                 }
                 else
@@ -182,6 +211,7 @@ namespace NovaSoftware
             }
         }
 
+        // Show a dialog box for errors or info
         private async Task ShowDialogAsync(string title, string content)
         {
             var dialog = new ContentDialog
@@ -193,21 +223,22 @@ namespace NovaSoftware
             await dialog.ShowAsync();
         }
 
+        // Update the cart display and total price
         private void UpdateCart()
         {
             var cartDisplayList = cart.Select(item => new
             {
                 item.Name,
-                Qty = item.Qty.ToString("D4"),
+                Qty = item.Qty.ToString(),
                 Price = item.Price.ToString("C2"),
-                Total = item.TotalPrice.ToString("C2")
+                TotalPrice = item.TotalPrice.ToString("C2")
             }).ToList();
 
-            CartListView.ItemsSource = null;
             CartListView.ItemsSource = cartDisplayList;
             TotalTextBlock.Text = $"Total: {total:C2}";
         }
 
+        // Apply a discount to the total price
         private void ApplyDiscountButton_Click(object sender, RoutedEventArgs e)
         {
             if (double.TryParse(InputTextBox.Text, out double discount))
@@ -228,6 +259,7 @@ namespace NovaSoftware
             }
         }
 
+        // Apply a deduction to the total price
         private void ApplyDeductionButton_Click(object sender, RoutedEventArgs e)
         {
             if (double.TryParse(InputTextBox.Text, out double deduction))
@@ -248,16 +280,19 @@ namespace NovaSoftware
             }
         }
 
+        // Handle payment with cash
         private async void PayWithCashButton_Click(object sender, RoutedEventArgs e)
         {
             await Checkout("cash");
         }
 
+        // Handle payment with credit
         private async void PayWithCreditButton_Click(object sender, RoutedEventArgs e)
         {
             await Checkout("credit");
         }
 
+        // Complete the checkout process and save the sale
         private async Task Checkout(string paymentMethod)
         {
             try
@@ -282,6 +317,7 @@ namespace NovaSoftware
                     new XElement("total", total.ToString("F2", CultureInfo.InvariantCulture))
                 );
 
+                // Add each product in the cart to the sale
                 foreach (var product in cart)
                 {
                     var saleItem = new XElement("item",
@@ -302,10 +338,10 @@ namespace NovaSoftware
                 await ShowDialogAsync("Success", "Transaction Completed");
 
                 cart.Clear();
+                additionHistory.Clear();
                 total = 0.0;
                 UpdateCart();
 
-                // Clear textboxes after checkout
                 BarcodeTextBox.Text = string.Empty;
                 QtyTextBox.Text = string.Empty;
                 InputTextBox.Text = string.Empty;
@@ -316,11 +352,13 @@ namespace NovaSoftware
             }
         }
 
+        // Go back to the main menu
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(MainMenuPage));
         }
 
+        // Add number pad input to the InputTextBox
         private void NumberPadButton_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button)
@@ -329,23 +367,58 @@ namespace NovaSoftware
             }
         }
 
+        // Clear the text of the InputTextBox
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
             InputTextBox.Text = string.Empty;
         }
 
+        // Add a decimal point to the InputTextBox
         private void DecimalButton_Click(object sender, RoutedEventArgs e)
         {
-            // Prevent multiple decimals in the input
             if (!InputTextBox.Text.Contains("."))
             {
                 InputTextBox.Text += ".";
             }
         }
 
+        // Remove the last added item or quantity from the cart
         private void RemoveItemButton_Click(object sender, RoutedEventArgs e)
         {
-            // Implement item removal logic if needed
+            if (additionHistory.Any())
+            {
+                var lastAddition = additionHistory.Last();
+                additionHistory.Remove(lastAddition);
+
+                var existingProduct = cart.FirstOrDefault(p => p.Name == lastAddition.Name);
+                if (existingProduct != null)
+                {
+                    existingProduct.Qty -= lastAddition.Qty;
+                    total -= lastAddition.Price * lastAddition.Qty;
+
+                    if (existingProduct.Qty <= 0)
+                    {
+                        cart.Remove(existingProduct);
+                    }
+
+                    UpdateCart();
+                }
+            }
+            else
+            {
+                _ = ShowDialogAsync("Error", "No items in the cart to remove.");
+            }
+        }
+
+        // Handle enter key press on the barcode text box
+        private async void BarcodeTextBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                await AddToCart();
+                BarcodeTextBox.Text = string.Empty;  // Clear the BarcodeTextBox after processing
+                QtyTextBox.Text = "1";  // Reset quantity to 1 for the next item
+            }
         }
     }
 }

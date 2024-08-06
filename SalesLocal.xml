@@ -19,4 +19,40 @@
     <item name="Apple" price="0.99" qty="3" />
     <item name="Sugar (4 lb)" price="2.79" qty="12" />
   </sale>
+  <sale date="2024-08-02T09:49:54" payment_method="cash">
+    <total>0.00</total>
+  </sale>
+  <sale date="2024-08-02T09:50:50" payment_method="cash">
+    <total>7.47</total>
+    <item name="Bread Loaf" price="2.49" qty="3" />
+  </sale>
+  <sale date="2024-08-02T09:59:29" payment_method="cash">
+    <total>7.47</total>
+    <item name="Bread Loaf" price="2.49" qty="3" />
+  </sale>
+  <sale date="2024-08-02T10:26:26" payment_method="credit">
+    <total>6.58</total>
+    <item name="Milk (1 Gallon)" price="3.29" qty="2" />
+  </sale>
+  <sale date="2024-08-02T14:12:18" payment_method="cash">
+    <total>3.00</total>
+    <item name="Bread Loaf" price="2.49" qty="3" />
+  </sale>
+  <sale date="2024-08-06T18:32:19" payment_method="cash">
+    <total>162454070.23</total>
+    <item name="Bell Peppers (1 lb)" price="2.99" qty="175266016" />
+  </sale>
+  <sale date="2024-08-06T19:25:15" payment_method="cash">
+    <total>312.40</total>
+    <item name="Bell Peppers (1 lb)" price="2.99" qty="120" />
+  </sale>
+  <sale date="2024-08-06T19:40:20" payment_method="credit">
+    <total>300.45</total>
+    <item name="Milk (1 Gallon)" price="3.29" qty="1" />
+    <item name="Spinach (10 oz)" price="2.49" qty="240" />
+  </sale>
+  <sale date="2024-08-06T19:41:21" payment_method="credit">
+    <total>90000000.00</total>
+    <item name="Cookiezzz" price="9000000.00" qty="10" />
+  </sale>
 </sales>

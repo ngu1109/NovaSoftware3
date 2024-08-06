@@ -150,4 +150,9 @@
     <barcode>10030</barcode>
     <price>2.99</price>
   </item>
+  <item>
+    <name>Cookiezzz</name>
+    <barcode>123</barcode>
+    <price>9000000</price>
+  </item>
 </stock>

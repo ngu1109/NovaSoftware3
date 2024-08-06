@@ -18,7 +18,7 @@ namespace NovaSoftware
 
         public ManageStockPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             // Load stock items if a stock file is already selected
             if (SharedState.CurrentStockFile != null)
             {
@@ -27,6 +27,7 @@ namespace NovaSoftware
             }
         }
 
+        // This button lets us pick an XML file
         private async void SelectXmlFileButton_Click(object sender, RoutedEventArgs e)
         {
             var picker = new FileOpenPicker
@@ -46,6 +47,7 @@ namespace NovaSoftware
             }
         }
 
+        // This button creates a new XML file
         private async void CreateNewXmlFileButton_Click(object sender, RoutedEventArgs e)
         {
             var picker = new FileSavePicker
@@ -68,8 +70,13 @@ namespace NovaSoftware
                 await LoadStockItemsAsync();
                 await ShowDialogAsync("File Created", $"Created and selected file: {file.Name}");
             }
+            else
+            {
+                await ShowDialogAsync("Error", "Operation cancelled. No file was created.");
+            }
         }
 
+        // This button adds a new item to the stock
         private async void AddItemButton_Click(object sender, RoutedEventArgs e)
         {
             if (currentStockFile == null)
@@ -91,6 +98,12 @@ namespace NovaSoftware
             if (!double.TryParse(priceText, out double price))
             {
                 await ShowDialogAsync("Error", "Invalid price. Please enter a valid number.");
+                return;
+            }
+
+            if (price < 0)
+            {
+                await ShowDialogAsync("Error", "Price cannot be negative.");
                 return;
             }
 
@@ -130,6 +143,7 @@ namespace NovaSoftware
             }
         }
 
+        // Check if the item is already in the stock
         private async Task<bool> IsDuplicateItemAsync(string name, string barcode)
         {
             if (currentStockFile == null)
@@ -151,34 +165,44 @@ namespace NovaSoftware
             return existingItems;
         }
 
+        // Load the stock items from the XML file
         private async Task LoadStockItemsAsync()
         {
             if (currentStockFile == null) return;
 
-            XDocument doc;
-            using (Stream fileStream = await currentStockFile.OpenStreamForReadAsync())
+            try
             {
-                doc = XDocument.Load(fileStream);
-            }
-
-            var items = doc.Element("stock")
-                .Elements("item")
-                .Select(item => new
+                XDocument doc;
+                using (Stream fileStream = await currentStockFile.OpenStreamForReadAsync())
                 {
-                    Name = item.Element("name")?.Value,
-                    Barcode = item.Element("barcode")?.Value,
-                    Price = item.Element("price")?.Value
-                })
-                .ToList();
+                    doc = XDocument.Load(fileStream);
+                }
 
-            StockListView.ItemsSource = items;
+                var items = doc.Element("stock")
+                    .Elements("item")
+                    .Select(item => new
+                    {
+                        Name = item.Element("name")?.Value,
+                        Barcode = item.Element("barcode")?.Value,
+                        Price = item.Element("price")?.Value
+                    })
+                    .ToList();
+
+                StockListView.ItemsSource = items;
+            }
+            catch (Exception ex)
+            {
+                await ShowDialogAsync("Error", $"Failed to load stock items: {ex.Message}");
+            }
         }
 
+        // Go back to the main menu
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(MainMenuPage));
         }
 
+        // Show a dialog box for errors or notifications
         private async Task ShowDialogAsync(string title, string content)
         {
             var dialog = new ContentDialog

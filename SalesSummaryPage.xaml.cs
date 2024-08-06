@@ -19,13 +19,14 @@ namespace NovaSoftware
 
         public SalesSummaryPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             if (SharedState.CurrentSalesFile != null)
             {
-                LoadSalesDataAsync();
+                LoadSalesDataAsync(); // Load the sales data if the file is already selected
             }
         }
 
+        // Load sales data from the selected file
         private async void LoadSalesDataAsync()
         {
             if (SharedState.CurrentSalesFile == null)
@@ -67,6 +68,7 @@ namespace NovaSoftware
                     await ShowDialogAsync("Notification", "No sales data found in the selected XML file.");
                 }
 
+                // Display sales data in the list view
                 SalesListView.ItemsSource = sales.Select(s => new
                 {
                     s.Date,
@@ -76,6 +78,7 @@ namespace NovaSoftware
 
                 var salesUtility = new SalesUtility();
 
+                // Calculate today's sales for cash and credit
                 var todaySalesCash = sales.Where(s => salesUtility.IsToday(s.Date) && s.PaymentMethod == "cash")
                                            .Sum(s => double.TryParse(s.Total, NumberStyles.Currency, CultureInfo.InvariantCulture, out double val) ? val : 0);
                 var todaySalesCredit = sales.Where(s => salesUtility.IsToday(s.Date) && s.PaymentMethod == "credit")
@@ -84,6 +87,7 @@ namespace NovaSoftware
                 TodayTotalSalesCashTextBlock.Text = FormatCurrency(todaySalesCash);
                 TodayTotalSalesCreditTextBlock.Text = FormatCurrency(todaySalesCredit);
 
+                // Calculate overall sales for cash and credit
                 var overallSalesCash = sales.Where(s => s.PaymentMethod == "cash")
                                             .Sum(s => double.TryParse(s.Total, NumberStyles.Currency, CultureInfo.InvariantCulture, out double val) ? val : 0);
                 var overallSalesCredit = sales.Where(s => s.PaymentMethod == "credit")
@@ -102,8 +106,14 @@ namespace NovaSoftware
             }
         }
 
+        // Parse the date from the XML
         private string ParseDate(string date)
         {
+            if (string.IsNullOrEmpty(date))
+            {
+                return "Unknown Date"; // Handle missing date attribute
+            }
+
             if (DateTime.TryParse(date, out DateTime parsedDate))
             {
                 return parsedDate.ToString("dd-MM-yyyy - HH:mm");
@@ -111,11 +121,13 @@ namespace NovaSoftware
             return date;
         }
 
+        // Format the amount as currency
         private string FormatCurrency(double amount)
         {
             return string.Format("{0:C}", amount);
         }
 
+        // Format the amount as currency (overload)
         private string FormatCurrency(string amount)
         {
             if (double.TryParse(amount, NumberStyles.Currency, CultureInfo.InvariantCulture, out double result))
@@ -125,6 +137,7 @@ namespace NovaSoftware
             return amount;
         }
 
+        // Select a new XML file for sales data
         private async void SelectXmlButton_Click(object sender, RoutedEventArgs e)
         {
             var picker = new FileOpenPicker
@@ -143,7 +156,7 @@ namespace NovaSoftware
             }
         }
 
-
+        // Save a sale into the XML file
         private async Task SaveSaleAsync(string date, string paymentMethod, double total)
         {
             if (SharedState.CurrentSalesFile == null)
@@ -192,7 +205,7 @@ namespace NovaSoftware
             }
         }
 
-
+        // Create a new XML file for sales data
         private async void CreateXmlButton_Click(object sender, RoutedEventArgs e)
         {
             var savePicker = new FileSavePicker
@@ -215,6 +228,7 @@ namespace NovaSoftware
             }
         }
 
+        // Initialize the new XML file with a root element
         private async Task InitializeSalesXmlAsync(StorageFile salesFile)
         {
             XDocument newDoc = new XDocument(new XElement("sales"));
@@ -225,11 +239,13 @@ namespace NovaSoftware
             }
         }
 
+        // Go back to the main menu
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(MainMenuPage));
         }
 
+        // Show a dialog box for errors or notifications
         private async Task ShowDialogAsync(string title, string content)
         {
             var dialog = new ContentDialog
@@ -244,9 +260,15 @@ namespace NovaSoftware
 
     public class SalesUtility
     {
+        // Check if the given date is today
         public bool IsToday(string date)
         {
             Debug.WriteLine($"Processing Date String: {date}");
+
+            if (string.IsNullOrEmpty(date))
+            {
+                return false; // Handle missing date
+            }
 
             // Specify the exact format used in the XML file
             string format = "dd-MM-yyyy - HH:mm";
