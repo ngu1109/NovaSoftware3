@@ -27,7 +27,9 @@ namespace NovaSoftware
             {
                 await ShowFileSelectionDialog();
             }
-            else
+
+            // Check again if both files are selected after the dialog
+            if (SharedState.CurrentSalesFile != null && SharedState.CurrentStockFile != null)
             {
                 Frame.Navigate(typeof(PosPage));
             }
@@ -62,7 +64,6 @@ namespace NovaSoftware
             {
                 SharedState.CurrentStockFile = await PickFileAsync("Select Stock File", "stock");
             }
-            Frame.Navigate(typeof(PosPage));
         }
 
         private async Task<StorageFile> PickFileAsync(string title, string expectedRootElement)
