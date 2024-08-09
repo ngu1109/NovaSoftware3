@@ -27,7 +27,7 @@
             <ListView x:Name="CartListView" Margin="0,10,0,10" VerticalAlignment="Stretch">
                 <ListView.Header>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Name"  Width="200" FontWeight="Bold" FontSize="18" Margin="10"/>
+                        <TextBlock Text="Name"  Width="400" FontWeight="Bold" FontSize="18" Margin="10"/>
                         <TextBlock Text="Quantity"  Width="200" FontWeight="Bold" FontSize="18" Margin="10"/>
                         <TextBlock Text="Price"  Width="200" FontWeight="Bold" FontSize="18" Margin="10"/>
                         <TextBlock Text="Total"  Width="200" FontWeight="Bold" FontSize="18" Margin="10"/>
@@ -36,7 +36,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Name}"  Width="200" Margin="0,0,0,0"/>
+                            <TextBlock Text="{Binding Name}"  Width="400" Margin="0,0,0,0"/>
                             <TextBlock Text="{Binding Qty}"  Width="200" Margin="20,0,0,0"/>
                             <TextBlock Text="{Binding Price}"  Width="200" Margin="20,0,0,0"/>
                             <TextBlock Text="{Binding TotalPrice}"  Width="200" Margin="20,0,0,0"/>
