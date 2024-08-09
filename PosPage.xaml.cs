@@ -146,7 +146,73 @@ namespace NovaSoftware
         // This button adds stuff to the cart
         private async void AddToCartButton_Click(object sender, RoutedEventArgs e)
         {
-            await AddToCart();
+            var barcode = BarcodeTextBox.Text.Trim();
+
+            // Automatically set quantity to 1 if it's not provided or invalid
+            if (!int.TryParse(QtyTextBox.Text.Trim(), out int qty) || qty <= 0)
+            {
+                qty = 1;
+            }
+
+            if (SharedState.CurrentStockFile == null)
+            {
+                await ShowDialogAsync("Error", "No stock file selected or created.");
+                return;
+            }
+
+            try
+            {
+                XDocument doc;
+                using (Stream fileStream = await SharedState.CurrentStockFile.OpenStreamForReadAsync())
+                {
+                    doc = XDocument.Load(fileStream);
+                }
+
+                var item = doc.Element("stock")?.Elements("item").FirstOrDefault(x => x.Element("barcode")?.Value == barcode);
+
+                if (item != null)
+                {
+                    var name = item.Element("name")?.Value ?? "Unknown";
+                    var priceElement = item.Element("price")?.Value;
+                    if (string.IsNullOrEmpty(priceElement) || !double.TryParse(priceElement, out double price))
+                    {
+                        await ShowDialogAsync("Error", "Invalid price in stock file");
+                        return;
+                    }
+
+                    var existingProduct = cart.FirstOrDefault(p => p.Name == name);
+                    if (existingProduct != null)
+                    {
+                        existingProduct.Qty += qty;
+                    }
+                    else
+                    {
+                        cart.Add(new Product(name, qty, price));
+                    }
+
+                    // Add to history
+                    additionHistory.Add(new ProductAddition(name, qty, price));
+                    total += price * qty;
+                    UpdateCart();
+                }
+                else
+                {
+                    await ShowDialogAsync("Error", "Item not found");
+                }
+            }
+            catch (Exception ex)
+            {
+                await ShowDialogAsync("Error", $"Failed to read stock file: {ex.Message}");
+            }
+            finally
+            {
+                // Clear the BarcodeTextBox and QtyTextBox for the next input
+                BarcodeTextBox.Text = string.Empty;
+                QtyTextBox.Text = string.Empty;
+
+                // Set focus back to the BarcodeTextBox
+                BarcodeTextBox.Focus(FocusState.Programmatic);
+            }
         }
 
         // Add an item to the cart using the barcode and quantity

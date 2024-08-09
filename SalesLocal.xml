@@ -59,4 +59,8 @@
     <total>859.30</total>
     <item name="Test 1" price="12.99" qty="70" />
   </sale>
+  <sale date="2024-08-09T10:14:31" payment_method="cash">
+    <total>3359.83</total>
+    <item name="Corsair K95 RGB Platinum XT Mechanical Keyboard" price="199.99" qty="21" />
+  </sale>
 </sales>

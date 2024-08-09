@@ -48,7 +48,7 @@
         </Grid>
 
         <!-- Actions Section -->
-        
+
         <!-- Input TextBox -->
         <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="InputTextBox" Header="Input" Margin="10"/>
 
@@ -59,48 +59,47 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Row="0" Grid.Column="0" Margin="10">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Button Content="1" Click="NumberPadButton_Click" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            <Button Content="2" Click="NumberPadButton_Click" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            <Button Content="3" Click="NumberPadButton_Click" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            <Button Content="4" Click="NumberPadButton_Click" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            <Button Content="5" Click="NumberPadButton_Click" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            <Button Content="6" Click="NumberPadButton_Click" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            <Button Content="7" Click="NumberPadButton_Click" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            <Button Content="8" Click="NumberPadButton_Click" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            <Button Content="9" Click="NumberPadButton_Click" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            <Button Content="0" Click="NumberPadButton_Click" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            <Button Content="Clear" Click="ClearButton_Click" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            <Button Content="." Click="DecimalButton_Click" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-        </Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Content="1" Click="NumberPadButton_Click" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <Button Content="2" Click="NumberPadButton_Click" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <Button Content="3" Click="NumberPadButton_Click" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <Button Content="4" Click="NumberPadButton_Click" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <Button Content="5" Click="NumberPadButton_Click" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <Button Content="6" Click="NumberPadButton_Click" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <Button Content="7" Click="NumberPadButton_Click" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <Button Content="8" Click="NumberPadButton_Click" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <Button Content="9" Click="NumberPadButton_Click" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <Button Content="0" Click="NumberPadButton_Click" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <Button Content="Clear" Click="ClearButton_Click" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <Button Content="." Click="DecimalButton_Click" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            </Grid>
             <Grid Grid.Row="0" Grid.Column="1" Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
+
                 </Grid.RowDefinitions>
 
                 <Button Content="Apply Discount" Click="ApplyDiscountButton_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0"/>
                 <Button Content="Apply Deduction" Click="ApplyDeductionButton_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1"/>
                 <Button Content="Pay with Cash" Click="PayWithCashButton_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2"/>
                 <Button Content="Pay with Credit" Click="PayWithCreditButton_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3"/>
-                <Button Content="Back" Click="BackButton_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,12" Grid.Row="4"/>
             </Grid>
         </Grid>
 
-    <!-- Additional Actions Section -->
+        <!-- Additional Actions Section -->
         <Grid Grid.Row="2" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
@@ -119,10 +118,10 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Button Content="Add to Cart" Click="AddToCartButton_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,0,10,10" Grid.Row="1"/>
                 <Button Content="Remove Item" Click="RemoveItemButton_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,0,10,10" Grid.Row="0"/>
+                <Button Content="Add to Cart" Click="AddToCartButton_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,0,10,10" Grid.Row="1"/>
             </Grid>
         </Grid>
-            
+        <Button Content="Back" Click="BackButton_Click" Margin="0,12" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Width="200"/>
     </Grid>
 </Page>
