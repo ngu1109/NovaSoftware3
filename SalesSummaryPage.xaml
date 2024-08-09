@@ -57,9 +57,9 @@
 
         <!-- Action Buttons -->
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="20">
-            <Button Content="Select XML" Click="SelectXmlButton_Click" Margin="0,10" />
-            <Button Content="Create XML" Click="CreateXmlButton_Click" Margin="0,10" />
-            <Button Content="Back" Click="BackButton_Click" Margin="0,10" />
+            <Button Content="Create XML" Click="CreateXmlButton_Click" Width="200" Margin="20,10" Background="#3386FF5B" />
+            <Button Content="Select XML" Click="SelectXmlButton_Click" Width="200" Margin="20,10" Background="#3363FFC2" />
         </StackPanel>
+        <Button Content="Back" Click="BackButton_Click" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="200" Background="#33FF0000"/>
     </Grid>
 </Page>

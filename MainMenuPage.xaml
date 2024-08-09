@@ -9,10 +9,10 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button Content="Manage Stock" Click="ManageStockButton_Click" Width="300"/>
-            <Button Content="POS System" Click="PosButton_Click" Width="300"/>
-            <Button Content="Sales Summary" Click="SalesSummaryButton_Click" Width="300"/>
+            <Button Content="Manage Stock" Click="ManageStockButton_Click" Width="300" Height="100" Margin="0,10,0,10" Background="#3388A0FF"/>
+            <Button Content="Sales Summary" Click="SalesSummaryButton_Click" Width="300" Height="100" Margin="0,10,0,10" Background="#33CBFF73"/>
+            <Button Content="POS System" Click="PosButton_Click" Width="300" Height="100" Margin="0,10,0,10" Background="#33DC6CFF"/>
         </StackPanel>
-        <Button Content="Logout" Click="LogOutButton_Click" Margin="0,0,0,0" Width="300" VerticalAlignment="Top"/>
+        <Button Content="Logout" Click="LogOutButton_Click" Margin="0,0,0,0" Width="300" VerticalAlignment="Top" Background="#33FF4949"/>
     </Grid>
 </Page>

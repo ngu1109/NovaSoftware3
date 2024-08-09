@@ -80,8 +80,8 @@
                 <Button Content="8" Click="NumberPadButton_Click" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
                 <Button Content="9" Click="NumberPadButton_Click" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
                 <Button Content="0" Click="NumberPadButton_Click" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-                <Button Content="Clear" Click="ClearButton_Click" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-                <Button Content="." Click="DecimalButton_Click" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <Button Content="Clear" Click="ClearButton_Click" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#33FF7777" />
+                <Button Content="." Click="DecimalButton_Click" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#33C1C1C1" />
             </Grid>
             <Grid Grid.Row="0" Grid.Column="1" Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <Grid.RowDefinitions>
@@ -92,10 +92,10 @@
 
                 </Grid.RowDefinitions>
 
-                <Button Content="Apply Discount" Click="ApplyDiscountButton_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0"/>
-                <Button Content="Apply Deduction" Click="ApplyDeductionButton_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1"/>
-                <Button Content="Pay with Cash" Click="PayWithCashButton_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2"/>
-                <Button Content="Pay with Credit" Click="PayWithCreditButton_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3"/>
+                <Button Content="Apply Discount" Click="ApplyDiscountButton_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Background="#33F2F97A"/>
+                <Button Content="Apply Deduction" Click="ApplyDeductionButton_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Background="#33FF7777"/>
+                <Button Content="Pay with Cash" Click="PayWithCashButton_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Background="#3370FF6C"/>
+                <Button Content="Pay with Credit" Click="PayWithCreditButton_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3" Background="#3312EDDE"/>
             </Grid>
         </Grid>
 
@@ -118,10 +118,10 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Button Content="Remove Item" Click="RemoveItemButton_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,0,10,10" Grid.Row="0"/>
-                <Button Content="Add to Cart" Click="AddToCartButton_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,0,10,10" Grid.Row="1"/>
+                <Button Content="Add to Cart" Click="AddToCartButton_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,0,10,10" Grid.Row="0" Background="#3370FF6C"/>
+                <Button Content="Remove Item" Click="RemoveItemButton_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,0,10,10" Grid.Row="1" Background="#33FF7777"/>
             </Grid>
         </Grid>
-        <Button Content="Back" Click="BackButton_Click" Margin="0,12" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Width="200"/>
+        <Button Content="Back" Click="BackButton_Click" Margin="0," Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Width="200" Background="#33FF0000"/>
     </Grid>
 </Page>
