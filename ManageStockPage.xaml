@@ -10,26 +10,32 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="5*" />
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="0" Margin="20">
-            <Button Content="Select XML File" Click="SelectXmlFileButton_Click" Margin="0,10"/>
-            <Button Content="Create New XML File" Click="CreateNewXmlFileButton_Click" Margin="0,10"/>
-            <Button Content="Back" Click="BackButton_Click" Margin="0,10"/>
+            <Button Content="Select XML File" Click="SelectXmlFileButton_Click" HorizontalAlignment="Stretch" Margin="0,10"/>
+            <Button Content="Create New XML File" Click="CreateNewXmlFileButton_Click" HorizontalAlignment="Stretch" Margin="0,10"/>
+            <Button Content="Back" Click="BackButton_Click" HorizontalAlignment="Stretch" Margin="0,10"/>
         </StackPanel>
 
         <Grid Grid.Column="1" Margin="20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,10">
                 <TextBox x:Name="ItemNameTextBox" PlaceholderText="Item Name" Width="200" Margin="10"/>
                 <TextBox x:Name="BarcodeTextBox" PlaceholderText="Barcode" Width="200" Margin="10"/>
                 <TextBox x:Name="PriceTextBox" PlaceholderText="Price" Width="200" Margin="10"/>
                 <Button Content="Add Item" Click="AddItemButton_Click" Margin="10"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10">
+                <TextBox x:Name="RemoveBarcodeTextBox" PlaceholderText="Enter Barcode to Remove" Width="300" Margin="10"/>
+                <Button Content="Remove Item" Click="RemoveItemButton_Click" Margin="10"/>
             </StackPanel>
 
             <ListView x:Name="StockListView" Grid.Row="1" Margin="10">

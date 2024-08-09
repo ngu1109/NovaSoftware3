@@ -62,6 +62,7 @@ namespace NovaSoftware
             {
                 SharedState.CurrentStockFile = await PickFileAsync("Select Stock File", "stock");
             }
+            Frame.Navigate(typeof(PosPage));
         }
 
         private async Task<StorageFile> PickFileAsync(string title, string expectedRootElement)

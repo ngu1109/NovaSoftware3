@@ -1,158 +1,153 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <stock>
   <item>
-    <name>Apple</name>
-    <barcode>10001</barcode>
-    <price>0.99</price>
+    <name>AMD Ryzen 9 5900X</name>
+    <barcode>001041</barcode>
+    <price>549.99</price>
   </item>
   <item>
-    <name>Bread Loaf</name>
-    <barcode>10002</barcode>
-    <price>2.49</price>
+    <name>Intel Core i9-14000K</name>
+    <barcode>001042</barcode>
+    <price>649.99</price>
   </item>
   <item>
-    <name>Milk (1 Gallon)</name>
-    <barcode>10003</barcode>
-    <price>3.29</price>
+    <name>NVIDIA GeForce RTX 3080</name>
+    <barcode>001043</barcode>
+    <price>699.99</price>
   </item>
   <item>
-    <name>Eggs (Dozen)</name>
-    <barcode>10004</barcode>
-    <price>1.99</price>
+    <name>ASUS ROG Strix X570-E Gaming Motherboard</name>
+    <barcode>001044</barcode>
+    <price>329.99</price>
   </item>
   <item>
-    <name>Chicken Breast (1 lb)</name>
-    <barcode>10005</barcode>
-    <price>4.99</price>
+    <name>Corsair Vengeance LPX 32GB DDR4</name>
+    <barcode>001045</barcode>
+    <price>179.99</price>
   </item>
   <item>
-    <name>Orange Juice (1 Gallon)</name>
-    <barcode>10006</barcode>
-    <price>4.29</price>
+    <name>Samsung 970 EVO Plus 1TB NVMe SSD</name>
+    <barcode>001046</barcode>
+    <price>149.99</price>
   </item>
   <item>
-    <name>Bananas (1 lb)</name>
-    <barcode>10007</barcode>
-    <price>0.59</price>
+    <name>Cooler Master Hyper 212 RGB CPU Cooler</name>
+    <barcode>001047</barcode>
+    <price>39.99</price>
   </item>
   <item>
-    <name>Cheddar Cheese (8 oz)</name>
-    <barcode>10008</barcode>
-    <price>2.99</price>
+    <name>EVGA 750W Gold Power Supply</name>
+    <barcode>001048</barcode>
+    <price>109.99</price>
   </item>
   <item>
-    <name>Yogurt (6 oz)</name>
-    <barcode>10009</barcode>
-    <price>0.89</price>
+    <name>NZXT H510 Mid-Tower Case</name>
+    <barcode>001049</barcode>
+    <price>89.99</price>
   </item>
   <item>
-    <name>Ground Beef (1 lb)</name>
-    <barcode>10010</barcode>
-    <price>5.99</price>
+    <name>Logitech G502 HERO Gaming Mouse</name>
+    <barcode>001050</barcode>
+    <price>49.99</price>
   </item>
   <item>
-    <name>Pasta (16 oz)</name>
-    <barcode>10011</barcode>
-    <price>1.49</price>
+    <name>Razer BlackWidow Elite Mechanical Keyboard</name>
+    <barcode>001051</barcode>
+    <price>129.99</price>
   </item>
   <item>
-    <name>Tomato Sauce (24 oz)</name>
-    <barcode>10012</barcode>
-    <price>1.79</price>
+    <name>LG UltraGear 27GL83A-B 27-Inch Gaming Monitor</name>
+    <barcode>001052</barcode>
+    <price>379.99</price>
   </item>
   <item>
-    <name>Olive Oil (16 oz)</name>
-    <barcode>10013</barcode>
-    <price>5.99</price>
+    <name>Elgato Stream Deck</name>
+    <barcode>001053</barcode>
+    <price>149.99</price>
   </item>
   <item>
-    <name>Butter (1 lb)</name>
-    <barcode>10014</barcode>
-    <price>3.49</price>
+    <name>Blue Yeti USB Microphone</name>
+    <barcode>001054</barcode>
+    <price>129.99</price>
   </item>
   <item>
-    <name>Rice (5 lb)</name>
-    <barcode>10015</barcode>
-    <price>4.49</price>
+    <name>Seagate Barracuda 4TB HDD</name>
+    <barcode>001055</barcode>
+    <price>99.99</price>
   </item>
   <item>
-    <name>Sugar (4 lb)</name>
-    <barcode>10016</barcode>
-    <price>2.79</price>
+    <name>WD Black SN850 1TB NVMe SSD</name>
+    <barcode>001056</barcode>
+    <price>169.99</price>
   </item>
   <item>
-    <name>Cereal (12 oz)</name>
-    <barcode>10017</barcode>
-    <price>3.99</price>
+    <name>SteelSeries Arctis 7 Wireless Gaming Headset</name>
+    <barcode>001057</barcode>
+    <price>149.99</price>
   </item>
   <item>
-    <name>Peanut Butter (16 oz)</name>
-    <barcode>10018</barcode>
-    <price>2.99</price>
+    <name>HyperX Cloud II Gaming Headset</name>
+    <barcode>001058</barcode>
+    <price>99.99</price>
   </item>
   <item>
-    <name>Jelly (16 oz)</name>
-    <barcode>10019</barcode>
-    <price>2.49</price>
+    <name>Elgato HD60 S Capture Card</name>
+    <barcode>001059</barcode>
+    <price>179.99</price>
   </item>
   <item>
-    <name>Potatoes (5 lb)</name>
-    <barcode>10020</barcode>
-    <price>3.99</price>
+    <name>Razer DeathAdder V2 Gaming Mouse</name>
+    <barcode>001060</barcode>
+    <price>69.99</price>
   </item>
   <item>
-    <name>Onions (3 lb)</name>
-    <barcode>10021</barcode>
-    <price>1.99</price>
+    <name>MSI MAG B550 TOMAHAWK Motherboard</name>
+    <barcode>001061</barcode>
+    <price>189.99</price>
   </item>
   <item>
-    <name>Carrots (1 lb)</name>
-    <barcode>10022</barcode>
-    <price>0.99</price>
+    <name>AMD Ryzen 5 5600X</name>
+    <barcode>001062</barcode>
+    <price>299.99</price>
   </item>
   <item>
-    <name>Bell Peppers (1 lb)</name>
-    <barcode>10023</barcode>
-    <price>2.99</price>
+    <name>Intel Core i5-12600K</name>
+    <barcode>001063</barcode>
+    <price>279.99</price>
   </item>
   <item>
-    <name>Broccoli (1 lb)</name>
-    <barcode>10024</barcode>
-    <price>1.89</price>
+    <name>Logitech MX Master 3 Wireless Mouse</name>
+    <barcode>001064</barcode>
+    <price>99.99</price>
   </item>
   <item>
-    <name>Spinach (10 oz)</name>
-    <barcode>10025</barcode>
-    <price>2.49</price>
+    <name>Samsung Odyssey G7 32-Inch Gaming Monitor</name>
+    <barcode>001065</barcode>
+    <price>749.99</price>
   </item>
   <item>
-    <name>Salmon (1 lb)</name>
-    <barcode>10026</barcode>
-    <price>9.99</price>
+    <name>Corsair K95 RGB Platinum XT Mechanical Keyboard</name>
+    <barcode>001066</barcode>
+    <price>199.99</price>
   </item>
   <item>
-    <name>Shrimp (1 lb)</name>
-    <barcode>10027</barcode>
-    <price>12.99</price>
+    <name>HyperX Alloy FPS Pro Mechanical Keyboard</name>
+    <barcode>001067</barcode>
+    <price>79.99</price>
   </item>
   <item>
-    <name>Chocolate Bar (3.5 oz)</name>
-    <barcode>10028</barcode>
-    <price>1.49</price>
+    <name>Razer Kraken X Ultralight Gaming Headset</name>
+    <barcode>001068</barcode>
+    <price>49.99</price>
   </item>
   <item>
-    <name>Ice Cream (1.5 qt)</name>
-    <barcode>10029</barcode>
-    <price>4.49</price>
+    <name>NZXT Kraken X63 280mm AIO Liquid Cooler</name>
+    <barcode>001069</barcode>
+    <price>159.99</price>
   </item>
   <item>
-    <name>Cookies (12 oz)</name>
-    <barcode>10030</barcode>
-    <price>2.99</price>
-  </item>
-  <item>
-    <name>Cookiezzz</name>
-    <barcode>123</barcode>
-    <price>9000000</price>
+    <name>Corsair Vengeance RGB Pro 32GB DDR4</name>
+    <barcode>001070</barcode>
+    <price>189.99</price>
   </item>
 </stock>

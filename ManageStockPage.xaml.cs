@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,7 +44,6 @@ namespace NovaSoftware
                 currentStockFile = file;
                 SharedState.CurrentStockFile = file; // Update shared state
                 await LoadStockItemsAsync();
-                await ShowDialogAsync("File Selected", $"Selected file: {file.Name}");
             }
         }
 
@@ -121,27 +121,107 @@ namespace NovaSoftware
                     doc = XDocument.Load(fileStream);
                 }
 
+                // Ensure the root <stock> element is present
                 var root = doc.Element("stock");
+                if (root == null)
+                {
+                    await ShowDialogAsync("Error", "The XML file does not contain a <stock> root element.");
+                    return;
+                }
+
+                // Create the new item element
                 var newItem = new XElement("item",
                     new XElement("name", itemName),
                     new XElement("barcode", barcode),
-                    new XElement("price", price.ToString())
+                    new XElement("price", price.ToString(CultureInfo.InvariantCulture))
                 );
+
+                // Add the new item to the <stock> element
                 root.Add(newItem);
 
+                // Save the modified document back to the file
                 using (Stream fileStream = await currentStockFile.OpenStreamForWriteAsync())
                 {
+                    // Clear the file stream before writing
+                    fileStream.SetLength(0);
                     doc.Save(fileStream);
                 }
 
                 await LoadStockItemsAsync();
                 await ShowDialogAsync("Success", "Item Added");
+                ItemNameTextBox.Text = string.Empty;
+                BarcodeTextBox.Text = string.Empty;
+                PriceTextBox.Text = string.Empty;
             }
             catch (Exception ex)
             {
                 await ShowDialogAsync("Error", $"Failed to add item: {ex.Message}");
             }
         }
+
+        // Remove the selected item from the stock
+        private async void RemoveItemButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentStockFile == null)
+            {
+                await ShowDialogAsync("Error", "No XML file selected or created.");
+                return;
+            }
+
+            var barcodeToRemove = RemoveBarcodeTextBox.Text.Trim();
+
+            if (string.IsNullOrEmpty(barcodeToRemove))
+            {
+                await ShowDialogAsync("Error", "Barcode field must be filled out.");
+                return;
+            }
+
+            try
+            {
+                XDocument doc;
+                using (Stream fileStream = await currentStockFile.OpenStreamForReadAsync())
+                {
+                    doc = XDocument.Load(fileStream);
+                }
+
+                var root = doc.Element("stock");
+                if (root == null)
+                {
+                    await ShowDialogAsync("Error", "The XML file does not contain a <stock> root element.");
+                    return;
+                }
+
+                // Find and remove the item with the specified barcode
+                var itemToRemove = root.Elements("item")
+                                       .FirstOrDefault(item => item.Element("barcode")?.Value == barcodeToRemove);
+
+                if (itemToRemove != null)
+                {
+                    itemToRemove.Remove(); // Remove the item from the document
+
+                    // Save the modified document back to the file
+                    using (Stream fileStream = await currentStockFile.OpenStreamForWriteAsync())
+                    {
+                        // Clear the file stream before writing to prevent leftover data
+                        fileStream.SetLength(0);
+                        doc.Save(fileStream);
+                    }
+
+                    await LoadStockItemsAsync();
+                    await ShowDialogAsync("Success", "Item Removed");
+                    RemoveBarcodeTextBox.Text = string.Empty; // Clear the barcode field
+                }
+                else
+                {
+                    await ShowDialogAsync("Error", "No item found with the given barcode.");
+                }
+            }
+            catch (Exception ex)
+            {
+                await ShowDialogAsync("Error", $"Failed to remove item: {ex.Message}");
+            }
+        }
+
 
         // Check if the item is already in the stock
         private async Task<bool> IsDuplicateItemAsync(string name, string barcode)
@@ -178,7 +258,14 @@ namespace NovaSoftware
                     doc = XDocument.Load(fileStream);
                 }
 
-                var items = doc.Element("stock")
+                var stockElement = doc.Element("stock");
+                if (stockElement == null)
+                {
+                    await ShowDialogAsync("Error", "The selected XML file does not contain a <stock> root element.");
+                    return; // Exit the method if the <stock> element is not found
+                }
+
+                var items = stockElement
                     .Elements("item")
                     .Select(item => new
                     {

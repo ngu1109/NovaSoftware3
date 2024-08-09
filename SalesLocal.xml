@@ -55,4 +55,8 @@
     <total>90000000.00</total>
     <item name="Cookiezzz" price="9000000.00" qty="10" />
   </sale>
+  <sale date="2024-08-09T09:43:48" payment_method="credit">
+    <total>859.30</total>
+    <item name="Test 1" price="12.99" qty="70" />
+  </sale>
 </sales>
