@@ -212,7 +212,7 @@ namespace NovaSoftware
             {
                 SuggestedStartLocation = PickerLocationId.DocumentsLibrary,
                 FileTypeChoices = { { "XML File", new List<string> { ".xml" } } },
-                SuggestedFileName = SalesFileName
+                SuggestedFileName = $"Sales-{DateTime.Now:dd-MM-yy-HH-mm-ss}"
             };
 
             StorageFile salesFile = await savePicker.PickSaveFileAsync();
@@ -220,7 +220,8 @@ namespace NovaSoftware
             if (salesFile != null)
             {
                 await InitializeSalesXmlAsync(salesFile);
-                await ShowDialogAsync("Notification", "Sales XML file has been created.");
+                SharedState.CurrentSalesFile = salesFile; // Update shared state with the selected file
+                await ShowDialogAsync("Notification", $"Sales XML file '{salesFile.Name}' has been created and selected.");
             }
             else
             {

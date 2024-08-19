@@ -53,7 +53,7 @@ namespace NovaSoftware
             var picker = new FileSavePicker
             {
                 SuggestedStartLocation = PickerLocationId.DocumentsLibrary,
-                SuggestedFileName = "NewStock"
+                SuggestedFileName = $"Stock-{DateTime.Now:dd-MM-yy-HH-mm-ss}"
             };
             picker.FileTypeChoices.Add("XML", new List<string> { ".xml" });
 
@@ -129,11 +129,11 @@ namespace NovaSoftware
                     return;
                 }
 
-                // Create the new item element
+                // Create the new item element with the price rounded to 2 decimal places
                 var newItem = new XElement("item",
                     new XElement("name", itemName),
                     new XElement("barcode", barcode),
-                    new XElement("price", price.ToString(CultureInfo.InvariantCulture))
+                    new XElement("price", Math.Round(price, 2).ToString("F2", CultureInfo.InvariantCulture))
                 );
 
                 // Add the new item to the <stock> element
