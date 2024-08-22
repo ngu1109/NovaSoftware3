@@ -46,7 +46,7 @@ namespace NovaSoftware
                 var salesElement = doc.Element("sales");
                 if (salesElement == null)
                 {
-                    await ShowDialogAsync("Error", "The selected XML file does not have a <sales> root element.");
+                    await ShowDialogAsync("Error", "The selected XML file does not have a <sales> root element. Please select a valid sales XML file.");
                     return;
                 }
 
@@ -151,6 +151,21 @@ namespace NovaSoftware
             if (file != null)
             {
                 SharedState.CurrentSalesFile = file;
+
+                // Ensure the selected file has a <sales> root element
+                XDocument doc;
+                using (Stream fileStream = await SharedState.CurrentSalesFile.OpenStreamForReadAsync())
+                {
+                    doc = XDocument.Load(fileStream);
+                }
+
+                if (doc.Element("sales") == null)
+                {
+                    SharedState.CurrentSalesFile = null;
+                    await ShowDialogAsync("Error", "The selected XML file does not have a <sales> root element. Please select a valid sales XML file.");
+                    return;
+                }
+
                 await ShowDialogAsync("Notification", "Sales XML file selected and loaded.");
                 LoadSalesDataAsync(); // Refresh data
             }
@@ -288,5 +303,4 @@ namespace NovaSoftware
 
             return false;
         }
-    }
-}
+    }}
