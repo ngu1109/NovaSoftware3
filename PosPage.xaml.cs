@@ -219,10 +219,15 @@ namespace NovaSoftware
         private async Task AddToCart()
         {
             var barcode = BarcodeTextBox.Text.Trim();
-            if (!int.TryParse(QtyTextBox.Text.Trim(), out int qty) || qty <= 0)
+
+            if (string.IsNullOrEmpty(QtyTextBox.Text.Trim()))
             {
-                await ShowDialogAsync("Error", "Invalid quantity");
-                return;
+                QtyTextBox.Text = "1";
+            }
+            int qty;
+            if (!int.TryParse(QtyTextBox.Text, out qty))
+            {
+                qty = 1;
             }
 
             if (SharedState.CurrentStockFile == null)
@@ -482,8 +487,8 @@ namespace NovaSoftware
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
                 await AddToCart();
-                BarcodeTextBox.Text = string.Empty;  // Clear the BarcodeTextBox after processing
                 QtyTextBox.Text = "1";  // Reset quantity to 1 for the next item
+                BarcodeTextBox.Text = string.Empty;  // Clear the BarcodeTextBox after processing
             }
         }
     }
