@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<sales>
+  <sale date="2020-02-15T09:35:21" payment_method="credit">
+    <total>549.99</total>
+    <item name="AMD Ryzen 9 5900X" price="549.99" qty="1" />
+  </sale>
+  <sale date="2020-03-12T11:25:14" payment_method="cash">
+    <total>89.99</total>
+    <item name="NZXT H510 Mid-Tower Case" price="89.99" qty="1" />
+  </sale>
+  <sale date="2020-06-17T16:05:47" payment_method="credit">
+    <total>199.98</total>
+    <item name="Cooler Master Hyper 212 RGB CPU Cooler" price="39.99" qty="2" />
+    <item name="Logitech G502 HERO Gaming Mouse" price="49.99" qty="2" />
+  </sale>
+  <sale date="2020-10-03T14:33:32" payment_method="cash">
+    <total>149.99</total>
+    <item name="Samsung 970 EVO Plus 1TB NVMe SSD" price="149.99" qty="1" />
+  </sale>
+  <sale date="2021-01-25T09:10:50" payment_method="credit">
+    <total>699.99</total>
+    <item name="NVIDIA GeForce RTX 3080" price="699.99" qty="1" />
+  </sale>
+  <sale date="2021-03-09T18:28:19" payment_method="cash">
+    <total>149.99</total>
+    <item name="SteelSeries Arctis 7 Wireless Gaming Headset" price="149.99" qty="1" />
+  </sale>
+  <sale date="2021-05-20T14:41:05" payment_method="credit">
+    <total>379.99</total>
+    <item name="LG UltraGear 27GL83A-B 27-Inch Gaming Monitor" price="379.99" qty="1" />
+  </sale>
+  <sale date="2021-08-14T17:45:30" payment_method="cash">
+    <total>329.99</total>
+    <item name="ASUS ROG Strix X570-E Gaming Motherboard" price="329.99" qty="1" />
+  </sale>
+  <sale date="2021-10-29T10:29:47" payment_method="credit">
+    <total>149.99</total>
+    <item name="Elgato Stream Deck" price="149.99" qty="1" />
+  </sale>
+  <sale date="2022-01-06T12:17:22" payment_method="cash">
+    <total>49.99</total>
+    <item name="Razer Kraken X Ultralight Gaming Headset" price="49.99" qty="1" />
+  </sale>
+  <sale date="2022-04-25T15:13:12" payment_method="credit">
+    <total>179.99</total>
+    <item name="Corsair Vengeance LPX 32GB DDR4" price="179.99" qty="1" />
+  </sale>
+  <sale date="2022-07-14T09:22:49" payment_method="cash">
+    <total>299.99</total>
+    <item name="AMD Ryzen 5 5600X" price="299.99" qty="1" />
+  </sale>
+  <sale date="2022-10-03T19:08:35" payment_method="credit">
+    <total>279.99</total>
+    <item name="Intel Core i5-12600K" price="279.99" qty="1" />
+  </sale>
+  <sale date="2023-01-22T11:50:31" payment_method="cash">
+    <total>49.99</total>
+    <item name="Logitech G502 HERO Gaming Mouse" price="49.99" qty="1" />
+  </sale>
+  <sale date="2023-04-11T16:15:12" payment_method="credit">
+    <total>89.99</total>
+    <item name="NZXT H510 Mid-Tower Case" price="89.99" qty="1" />
+  </sale>
+  <sale date="2023-06-17T13:04:47" payment_method="cash">
+    <total>109.99</total>
+    <item name="EVGA 750W Gold Power Supply" price="109.99" qty="1" />
+  </sale>
+  <sale date="2023-09-07T08:23:11" payment_method="credit">
+    <total>149.99</total>
+    <item name="Blue Yeti USB Microphone" price="129.99" qty="1" />
+    <item name="Razer DeathAdder V2 Gaming Mouse" price="69.99" qty="1" />
+  </sale>
+  <sale date="2023-12-14T09:35:28" payment_method="cash">
+    <total>99.99</total>
+    <item name="HyperX Cloud II Gaming Headset" price="99.99" qty="1" />
+  </sale>
+  <sale date="2024-02-18T11:49:55" payment_method="credit">
+    <total>149.99</total>
+    <item name="Elgato HD60 S Capture Card" price="179.99" qty="1" />
+  </sale>
+  <sale date="2024-04-23T10:27:39" payment_method="cash">
+    <total>99.99</total>
+    <item name="Seagate Barracuda 4TB HDD" price="99.99" qty="1" />
+  </sale>
+  <sale date="2024-05-25T12:54:03" payment_method="credit">
+    <total>649.99</total>
+    <item name="Intel Core i9-14000K" price="649.99" qty="1" />
+  </sale>
+  <sale date="2024-07-19T14:20:11" payment_method="cash">
+    <total>129.99</total>
+    <item name="Razer BlackWidow Elite Mechanical Keyboard" price="129.99" qty="1" />
+  </sale>
+  <sale date="2024-08-11T15:23:58" payment_method="credit">
+    <total>199.99</total>
+    <item name="Corsair K95 RGB Platinum XT Mechanical Keyboard" price="199.99" qty="1" />
+  </sale>
+  <sale date="2024-08-14T18:31:27" payment_method="cash">
+    <total>69.99</total>
+    <item name="Razer DeathAdder V2 Gaming Mouse" price="69.99" qty="1" />
+  </sale>
+  <sale date="2024-08-20T10:18:34" payment_method="credit">
+    <total>79.99</total>
+    <item name="HyperX Alloy FPS Pro Mechanical Keyboard" price="79.99" qty="1" />
+  </sale>
+  <sale date="2024-08-21T11:47:21" payment_method="cash">
+    <total>49.99</total>
+    <item name="Logitech MX Master 3 Wireless Mouse" price="99.99" qty="1" />
+  </sale>
+  <sale date="2024-08-22T08:50:56" payment_method="credit">
+    <total>159.99</total>
+    <item name="NZXT Kraken X63 280mm AIO Liquid Cooler" price="159.99" qty="1" />
+  </sale>
+  <sale date="2024-08-23T09:32:45" payment_method="cash">
+    <total>199.99</total>
+    <item name="Samsung 970 EVO Plus 1TB NVMe SSD" price="149.99" qty="1" />
+    <item name="Cooler Master Hyper 212 RGB CPU Cooler" price="39.99" qty="1" />
+  </sale>
+  <sale date="2024-08-24T07:18:13" payment_method="credit">
+    <total>169.99</total>
+    <item name="WD Black SN850 1TB NVMe SSD" price="169.99" qty="1" />
+  </sale>
+  <sale date="2024-08-24T14:52:19" payment_method="cash">
+    <total>749.99</total>
+    <item name="Samsung Odyssey G7 32-Inch Gaming Monitor" price="749.99" qty="1" />
+  </sale>
+  <sale date="2024-08-25T09:45:30" payment_method="credit">
+    <total>189.99</total>
+    <item name="Corsair Vengeance RGB Pro 32GB DDR4" price="189.99" qty="1" />
+  </sale>
+  <sale date="2024-08-25T13:22:40" payment_method="cash">
+    <total>149.99</total>
+    <item name="HyperX Cloud II Gaming Headset" price="99.99" qty="1" />
+    <item name="Logitech MX Master 3 Wireless Mouse" price="99.99" qty="1" />
+  </sale>
+</sales>
